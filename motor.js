@@ -33,12 +33,29 @@ function oku(c, ctx){
   const nodeI = Math.floor(c.node/30), zenebI = (nodeI+6)%12;
 
   // unsurlar
-  const els = Object.entries(c.el).sort((a,b)=>b[1]-a[1]);
+  const els = Object.entries(c.el).sort((a,b)=>b[1]-a[1]||(b[0]===c.galip)-(a[0]===c.galip)||(b[0]===c.isimUnsur)-(a[0]===c.isimUnsur));
   const top = els[0][0], ikinci = els[1][0], zayif = els[3][0];
   const denge = els[0][1]-els[3][1] <= 1;
   const toplamHarf = els.reduce((a,e)=>a+e[1],0)||1;
   const pay = k => c.el[k]/toplamHarf;
   const U = K.UNSUR[top];
+  const unsurCumle = c.isimUnsur===top
+    ? `Dörde bölündüğünde kalan ${c.isimUnsur.toLocaleLowerCase("tr")} unsurunu gösterir; bu, harflerinin tek tek tartılmasıyla çıkan galip unsurla aynıdır ve hükmün kuvvetine delildir.`
+    : `Dörde bölündüğünde kalan ${c.isimUnsur.toLocaleLowerCase("tr")} unsurunu gösterir. Lâkin harfler tek tek tartıldığında ${top.toLocaleLowerCase("tr")} galip gelir; hüküm harflerin galibine göre verilir, ${c.isimUnsur.toLocaleLowerCase("tr")} ise onun altında ikinci bir damar olarak işler.`;
+
+  // seyyâreler ve hâneler
+  const gez = c.gez || [];
+  const saatYok = !!c.inp.saatYok;
+  const PAD = k => Y(k).ad;
+  const hanede = n => saatYok ? [] : gez.filter(g=>g.hane===n);
+  const sadHane = n => hanede(n).reduce((a,g)=>a+SAD[g.k],0);
+  const derece = lon => `${Math.floor(lon%30)}`;
+  function haneYorum(n){
+    const ic = hanede(n);
+    if(ic.length) return ic.map(g=>`${K.HANE_YILDIZ[n][g.k]} ${PAD(g.k)} burada ${K.HAL[g.hal]}.${g.raci?" "+K.RACI:""}`);
+    const sk = BURC[hane(n)][3], g = gez.find(x=>x.k===sk);
+    return [`${K.SAHIP_HANEDE} ${PAD(sk)} ise ${BURC[g.bi][0]} burcunda, ${SIRA[g.hane]} hânededir; yani ${K.HANE[g.hane]} hânesine düşmüştür. Bu hânenin işleri o yoldan, ${K.HANE[g.hane]} kapısından gelir. ${PAD(sk)} ${K.HAL[g.hal]}.`];
+  }
 
   // harfler
   const harfAd = l => NAME[l.b];
@@ -71,8 +88,8 @@ function oku(c, ctx){
   const anneOran = c.an.total > c.nm.total ? "validenin harfleri senin harflerinden ağır basar; kaderinde ana tarafının izi, senin kendi seçimlerinden daha derindir" : c.an.total < c.nm.total ? "senin harflerin validenin harflerinden ağır basar; kaderini daha çok kendi elinle yazarsın" : "senin harflerinle validenin harfleri denk gelmiştir; bu nadir bir mizandır";
   S.push({id:"hurif", title:"İlm-i Hurûf ve Yıldızname", subs:[
    {h:"Ebced Hesabı", p:P(
-     `İsmin ${c.inp.ad} ebced-i kebîr ile ${c.nm.total} gelir; validen ${c.inp.anne} ${c.an.total} gelir. İkisinin toplamı ${c.top} eder. ${giris()} isim ile valide ebcedi bir terazinin iki kefesidir: burada ${anneOran}.`,
-     `Bu toplam on ikiye bölündüğünde ${c.k12} kalır ve tâli'in ${c.isimBurc[0]} burcuna düşer. Yediye bölündüğünde ${c.k7} kalır ve isminin yıldızı ${isimY.ad} olur. Dörde bölümde unsurun ${c.isimUnsur} çıkar. Toplamın rakamları birbirine katılıp teke indirildiğinde aslı ${kok(c.top)} olur; isminin tek başına aslı ise ${kok(c.nm.total)} çıkar.`,
+     `İsmin eski yazıyla ${c.nm.yaz.ar}, validenin ismi ${c.an.yaz.ar} diye yazılır${(c.nm.yaz.kaynak!=="sözlük"||c.an.yaz.kaynak!=="sözlük")?" (eski yazıda karşılığı bilinmeyen isim, Osmanlı imlâsı usulüyle yazılmıştır)":""}. İsmin ${c.inp.ad} ebced-i kebîr ile ${c.nm.total} gelir; validen ${c.inp.anne} ${c.an.total} gelir. İkisinin toplamı ${c.top} eder. ${giris()} isim ile valide ebcedi bir terazinin iki kefesidir: burada ${anneOran}.`,
+     `Bu toplam on ikiye bölündüğünde ${c.k12} kalır ve tâli'in ${c.isimBurc[0]} burcuna düşer. Yediye bölündüğünde ${c.k7} kalır ve isminin yıldızı ${isimY.ad} olur. ${unsurCumle} Toplamın rakamları birbirine katılıp teke indirildiğinde aslı ${kok(c.top)} olur; isminin tek başına aslı ise ${kok(c.nm.total)} çıkar.`,
      kok(c.top)===kok(c.nm.total) ? "İsminin aslı ile toplamın aslı aynı çıkmıştır. Bu, kaderinle kendi tabiatının aynı yöne aktığına, iç ile dışın birbirini tuttuğuna delâlet eder." : "İsminin aslı ile toplamın aslı ayrı düşmüştür. Bu, kendi tabiatınla kaderinin seni bazen iki ayrı yöne çektiğine, ömrünün bu iki sesi barıştırmakla geçeceğine delâlet eder."
    )},
    {h:"İlm-i Sîmâ", p:P(
@@ -128,8 +145,21 @@ function oku(c, ctx){
      `${giris()} her ismin bir akışı vardır: ilk harf kapıyı açar, son harf kapıyı kapatır, aradaki harfler de yolu döşer. Senin yolun ${ilk||"-"} ile başlayıp ${son||"-"} ile biter; ${ilk&&son&&K.UNSUR? (()=>{ const e1=Object.keys(UNSUR_HARF).find(k=>UNSUR_HARF[k].includes(ilk)), e2=Object.keys(UNSUR_HARF).find(k=>UNSUR_HARF[k].includes(son)); return e1===e2?`ikisi de ${e1.toLocaleLowerCase("tr")} tabiatlıdır, yani yolun başında neyle çıktıysan sonunda da ona varırsın`:`biri ${e1.toLocaleLowerCase("tr")}, öteki ${e2.toLocaleLowerCase("tr")} tabiatlıdır, yani ömrün bir tabiattan ötekine geçişle geçer`; })():""}.`,
      isimY.imtihan,
      `Manevî akışını açan amel, ${K.UNSUR[zayif].yon==="doğu"?"sabah erken kalkmak ve güne dua ile başlamak":K.UNSUR[zayif].yon==="batı"?"akşam vakti tefekkür etmek ve günün hesabını yapmak":K.UNSUR[zayif].yon==="kuzey"?"gece vakti, herkes uyurken kalkıp birkaç dakika dua etmek":"öğle vaktinde işi bırakıp kısa bir mola ile kendine dönmek"} olur; çünkü harflerinde en zayıf unsur ${dir(zayif)} ve onun vakti budur.`
+   )},
+   {h:"Seyyârelerin Mevkii", p:P(
+     `${giris()} doğduğun ânda yedi seyyârenin gökteki yerleri şöyleydi${saatYok?"; doğum saati bilinmediğinden hâneleri yazılmamış, yalnız burçları verilmiştir":""}:`,
+     ...gez.map(g=>`${PAD(g.k)} ${BURC[g.bi][0]} (${BURC[g.bi][1]}) burcunda, ${derece(g.lon)} derecede${g.hane?`, ${SIRA[g.hane]} hânede, yani ${K.HANE[g.hane]} hânesinde`:""}. ${K.HAL[g.hal].charAt(0).toLocaleUpperCase("tr")+K.HAL[g.hal].slice(1)}.${g.raci?" "+K.RACI:""}`),
+     (()=>{ const agir = gez.filter(g=>g.hane&&[1,4,7,10].includes(g.hane)&&(g.k==="Zuhal"||g.k==="Mirrih"||g.hal==="vebâl"||g.hal==="hubût"));
+       if(!agir.length) return "Kazık hânelerinde, yani birinci, dördüncü, yedinci ve onuncu hânelerde ağır bir yıldız bulunmaz; bu, hayatın temel direklerinin sarsılmadan durduğuna delâlet eder.";
+       const g=agir.sort((a,b)=>(b.k==="Zuhal")-(a.k==="Zuhal"))[0];
+       return `Bu haritanın en ağır mührü şudur: ${PAD(g.k)} ${SIRA[g.hane]} hânede, yani ${K.HANE[g.hane]} hânesinde oturur. Kaderin en çok bu kapıda sınanır; sabır ve dua da en çok bu kapıya lâzımdır.`; })()
+   )},
+   !saatYok && {h:"Bu Devrin Hükmü", p:P(
+     `Kadîm müneccimler doğuş haritasına bakıp yalnız ömrün tamamını değil, bulunulan devri de okurlardı. Bugün gökte Zühal ${BURC[c.gecis[0].bi][0]}, Müşterî ise ${BURC[c.gecis[1].bi][0]} burcundadır.`,
+     K.GECIS_ZUHAL[c.gecis[0].hane],
+     K.GECIS_MUSTERI[c.gecis[1].hane]
    )}
-  ]});
+  ].filter(Boolean)});
 
   /* ============ II. Karakter ve Kader ============ */
   const lv = x => x<0.2?0:x<0.34?1:2;
@@ -158,7 +188,7 @@ function oku(c, ctx){
      `Kader izin, Güneş'in burcu ile isminin burcu arasında çizilir. Güneş'in ${c.sunSign[2].toLocaleLowerCase("tr")}, isminin ise ${c.isimBurc[2].toLocaleLowerCase("tr")} tabiatlı bir burçtadır; bunlar ${GECIS[c.sunSign[2]][c.isimBurc[2]]} iki tabiattır. ${c.sunSign[2]===c.isimBurc[2] ? "Doğuşunla ismin aynı yöne çeker; kaderin dosdoğru bir yoldur, ama o yolda tek renk kalmak da senin darlığın olabilir." : K.UNSUR[c.sunSign[2]].karsit===c.isimBurc[2] ? "Doğuşunla ismin seni iki zıt yöne çeker; ömrün bu iki tabiatı barıştırmakla geçer ve barıştırdığın gün kaderin açılır." : "Doğuşunla ismin birbirine yardım eder; birinin eksiğini öteki tamamlar."}`,
      `${giris()} ${isimY.ad} yıldızının izini taşıyanın ruhsal yükü şudur: ${isimY.imtihan.split(": ")[1]||isimY.imtihan}`
    )}
-  ]});
+  ].filter(Boolean)});
 
   /* ============ III. Evlilik ve Aşk ============ */
   const yedi = KB(yedinciI), yediEl = BURC[yedinciI][2], yediSahipY = Y(yedinciSahip);
@@ -166,6 +196,7 @@ function oku(c, ctx){
   ask = Math.max(1, Math.min(3, ask));
   const ruhPuan = (menzil[0]==="s"?1:0) + (K.UNSUR[top].tamamlayan===yediEl||top===yediEl?1:0) + (SAD[yedinciSahip]>0?1:0) + (varMi("Zuhre")||varMi("Musteri")?1:0);
   let huzur = SAD[yedinciSahip] + (K.UNSUR[top].karsit===yediEl?-1:K.UNSUR[top].tamamlayan===yediEl||top===yediEl?1:0) + (menzil[0]==="s"?1:menzil[0]==="n"?-1:0) + (varMi("Mirrih")?-1:0);
+  huzur += sadHane(7);
   const huzurD = huzur<=-1?0:huzur<=1?1:2;
   const esElem = K.UNSUR[top].tamamlayan;
   const esHarfler = (()=>{ const pool=[...new Set([...ES_HARF[esElem], ...ES_HARF[yediEl]])]; const out=[]; while(out.length<3&&pool.length) out.push(pool.splice(Math.floor(R()*pool.length),1)[0]); return out; })();
@@ -173,6 +204,7 @@ function oku(c, ctx){
   let ilkYas = {Ateş:[19,23],Hava:[21,25],Su:[22,26],Toprak:[24,28]}[top].slice();
   const zuhalGec = varMi("Zuhal") || yedinciSahip==="Zuhal";
   if(zuhalGec){ ilkYas=[ilkYas[0]+4, ilkYas[1]+5]; }
+  if(hanede(7).some(g=>g.k==="Zuhal")){ ilkYas=[ilkYas[0]+3, ilkYas[1]+3]; }
   if(varMi("Zuhre")) { ilkYas=[ilkYas[0]-1, ilkYas[1]-1]; }
   S.push({id:"evlilik", title:"Evlilik ve Aşk", subs:[
    {h:"Evlilik Tâli'i", p:P(
@@ -209,12 +241,14 @@ function oku(c, ctx){
      `Zühre devri, yani sevginin yaşı, kadîm kitaplarda on dört ile yirmi iki arası sayılır; Şems devri ise yirmi iki ile kırk bir arasıdır. Senin harflerinin tabiatına göre evliliğe en açık ilk dönem ${ilkYas[0]} ile ${ilkYas[1]} yaşları arasıdır.`,
      zuhalGec ? "Kaderinde Zühal'in eli olduğundan evlilik gecikebilir. Zühal'in devri yirmi dokuz ile otuz yaşları arasında tamamlanır; bu yaşlar senin için bir dönüm noktasıdır ve çoğu kez kalıcı bir bağ bu devrin ardından kurulur." : `Bu dönem geçerse, Müşterî'nin on iki yıllık devri yirmi dört ve otuz altı yaşlarını da hayırlı kılar.`,
      `Evlilik için en uğurlu gün Cuma, en uğurlu saat Zühre saatidir. ${isimY.gun} günü de senin isminin yıldızının günü olduğundan hayırlı sayılır.`
-   )}
-  ]});
+   )},
+   !saatYok && {h:"Yedinci Hânenin Misafirleri", p:P(...haneYorum(7))}
+  ].filter(Boolean)});
 
   /* ============ IV. Çocuk ve Yuva ============ */
   const bes = KB(besinciI);
   let evlat = bes.verim + 1 + (varMi("Musteri")?1:0) + (top==="Su"?1:0) - (varMi("Zuhal")?1:0) - (top==="Ateş"&&bes.verim===0?1:0);
+  evlat += sadHane(5);
   evlat = Math.max(1, Math.min(5, evlat));
   const evlatStr = ["","bir yahut iki","iki","iki yahut üç","üç","üç yahut dört"][evlat];
   let erkek = (bes.cins==="erkek"?1:-1) + ERKEK_YILDIZ[c.hourRuler] + ((top==="Ateş"||top==="Hava")?1:-1) + ERKEK_YILDIZ[c.isimYildiz];
@@ -239,8 +273,9 @@ function oku(c, ctx){
    {h:"Evlât Kısmeti ve Kuvveti", p:P(
      bes.verim===2 ? "Evlât kısmetin kuvvetlidir. Evlâtların senin yüzünü güldürür ve yaşlılığında sana dayanak olur." : bes.verim===1 ? "Evlât kısmetin orta kuvvettedir. Evlâtların bağımsız ruhlu olur, kendi yollarını erken seçer." : "Evlât kısmetin sayıca az ama değerce büyüktür. Az evlât, çok emek ister; ama emeğinin meyvesi de büyük olur.",
      `Evlât kısmetini açmak için kitaplarda ${["Vehhâb","Mübdi'"].map(n=>`Yâ ${n} (${esmaVal(n)} kere)`).join(" ve ")} esmâlarının okunması tavsiye edilir.`
-   )}
-  ]});
+   )},
+   !saatYok && {h:"Beşinci Hânedeki Yıldızlar", p:P(...haneYorum(5))}
+  ].filter(Boolean)});
 
   /* ============ V. İş, Kazanç ve Rızık ============ */
   const onuncu = KB(onuncuI), ikinciB = KB(ikinciI);
@@ -278,8 +313,34 @@ function oku(c, ctx){
      `Rızkını bağlayan, harflerindeki en zayıf unsurdur: ${zayif.toLocaleLowerCase("tr")}. ${({Ateş:"Cesaretsizlik ve bekleyip durmak kısmetini bağlar.",Hava:"Derdini söyleyememek ve yardım istememek kısmetini bağlar.",Su:"Gönülsüz iş yapmak ve vermekten kaçınmak kısmetini bağlar.",Toprak:"Dağınıklık ve yarım bırakılan işler kısmetini bağlar."})[zayif]}`,
      `Rızkın açılması için Yâ ${rizikEsma} (${K.ESMA[rizikEsma]}) esmâsını ebcedi kadar, yani ${esmaVal(rizikEsma)} kere okumak tavsiye olunur. Bunu ${isimY.gun} günü, güneş doğduktan sonraki ilk saatte, ${K.UNSUR[top].yon} yönüne dönerek okumak daha tesirlidir.`,
      `Ayrıca Yâ Rezzâk (${esmaVal("Rezzâk")} kere) ve Yâ Fettâh (${esmaVal("Fettâh")} kere) esmâları sabah namazından sonra okunur. Haftada bir, ${isimY.gun} günü, gizlice verilen bir sadaka rızkın kilidini açar. Uğurlu taşın ${isimY.tas}, uğurlu rengin ise ${isimY.renk} olarak bilinir.`
-   )}
-  ]});
+   )},
+   !saatYok && {h:"Onuncu Hânedeki Yıldızlar", p:P(...haneYorum(10))},
+   !saatYok && {h:"İkinci Hânedeki Yıldızlar", p:P(...haneYorum(2))}
+  ].filter(Boolean)});
+
+  /* ============ Özet ============ */
+  const SIFAT = {Hamel:"atılgan",Sevr:"sabırlı",Cevzâ:"çevik",Seretân:"hassas",Esed:"izzetli",Sünbüle:"titiz",Mîzân:"zarif",Akreb:"derin",Kavs:"hür",Cedy:"ağırbaşlı",Delv:"başkalarına benzemeyen",Hût:"rüyalı"};
+  const UNSUR_OZ = {Ateş:"Gönlünde ateş galiptir: izzet, cesaret ve çabuk tutuşan bir muhabbet.",Hava:"Gönlünde hava galiptir: zekâ, söz ve durmayan bir merak.",Su:"Gönlünde su galiptir: sezgi, merhamet ve derin bir hafıza.",Toprak:"Gönlünde toprak galiptir: sabır, sadakat ve sağlam bir temel."};
+  const IMT = {Zuhal:"sabır ve yalnızlık",Musteri:"bolluğu paylaşmak",Mirrih:"öfkeye hâkim olmak",Sems:"gururu eğmek",Zuhre:"gönlü ve nefsi terbiye",Utarid:"sözü ve kararı tartmak",Kamer:"değişen hâllere sabit durmak"};
+  const yedi7 = hanede(7), bes5 = hanede(5);
+  const disi = saatYok ? null : `Dışın ${c.ascSign[1]} gibi ${SIFAT[c.ascSign[0]]}`;
+  S.ozet = {
+    ad: c.inp.ad, anne: c.inp.anne, ebced: c.top,
+    yazilis: c.nm.yaz.ar,
+    isimBurc: `${c.isimBurc[0]} (${c.isimBurc[1]})`, unsur: top, yildiz: isimY.ad,
+    oz: `${disi ? disi+", için" : "İçin"} ${c.moonSign[1]} gibi ${SIFAT[c.moonSign[0]]}. ${UNSUR_OZ[top]}`,
+    imtihan: `Ana imtihanın ${IMT[c.isimYildiz]}.`,
+    ask: `${["","Tek","İki","Üç"][ask]} büyük aşk. Ruh eşi ihtimali ${ruhPuan>=3?"kavî":ruhPuan>=2?"orta":"zayıf"}. Evlilik ${["çetin","orta hâlli","huzurlu"][huzurD]} geçer.`,
+    evlilikYas: `${ilkYas[0]}–${ilkYas[1]} yaş arası`,
+    yedi: yedi7.length ? `Yedinci hânede ${yedi7.map(g=>PAD(g.k)).join(" ve ")}` : `Eşini ${Y(yedinciSahip).ad} gösterir`,
+    evlat: `${evlatStr.charAt(0).toLocaleUpperCase("tr")+evlatStr.slice(1)} evlât`, evlatCins: erkek>=2?"erkek tabiat ağır":erkek<=-2?"dişi tabiat ağır":"erkek ve dişi denk",
+    bes: bes5.length ? `Beşinci hânede ${bes5.map(g=>PAD(g.k)).join(" ve ")}` : "",
+    rizik: `Rızkın ${K.UNSUR[top].yon} tarafından gelir`, meslek: saatYok ? isimY.meslek.split(/[.;]/)[0] : (hanede(10)[0] ? `Mevki hânende ${hanede(10).map(g=>PAD(g.k)).join(" ve ")}; ${({Zuhal:"geç ama sağlam yükseliş",Musteri:"itibar ve devlet kapısı",Mirrih:"rekabetle yükseliş",Sems:"baş olmak",Zuhre:"sanat ve zarafetle mevki",Utarid:"kalem ve ticaret",Kamer:"halkla iç içe iş"})[hanede(10)[0].k]}` : `Mevki hânen ${BURC[onuncuI][0]}`),
+    gun: isimY.gun, renk: isimY.renk, tas: isimY.tas, maden: isimY.maden,
+    esma: `Yâ ${enMunasip.tr}`, esmaSay: enMunasip.v, esmaMana: K.ESMA[enMunasip.tr]||"",
+    devir: saatYok ? `Sıradaki Müşterî yılı ${sonrakiMusteri} yaş` : `Müşterî bugün ${SIRA[c.gecis[1].hane]}, Zühal ${SIRA[c.gecis[0].hane]} hânende`,
+    kismet: ["Kapalı, sabırla açılır","Orta, emekle açılır","Açık","Çok açık"][kismetDerece]
+  };
 
   return S;
 }

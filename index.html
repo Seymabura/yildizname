@@ -8,7 +8,7 @@
 <meta name="description" content="İsmin, annenin ismi ve doğduğun anın gökyüzüne göre eski müneccimlerin usulüyle yıldızname.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&display=swap">
 <style>
 :root{
   --night:#070A16; --night2:#0C1230;
@@ -193,6 +193,45 @@ table{border-collapse:collapse;width:100%;min-width:300px;font-size:.84rem}
 th,td{border-bottom:1px solid var(--line);padding:.35rem .5rem;text-align:left}
 th{color:var(--muted);font-weight:600}
 
+
+/* ---------- Özet kartı ---------- */
+.ar{font-family:"Amiri","Noto Naskh Arabic","Geeza Pro","Traditional Arabic",serif;font-weight:400;letter-spacing:0}
+.namebox .who b .ar{font-size:1.25rem;color:var(--silver);margin:0 .2rem}
+.tile .t.ar{font-size:1.5rem;line-height:1.1}
+td.ar{font-size:1.25rem}
+.yazk{font-size:.76rem;color:var(--muted);margin:-.2rem 0 .5rem}
+.reading.is-oz{background:none;border:0;box-shadow:none;padding:0;-webkit-backdrop-filter:none;backdrop-filter:none}
+.reading.is-oz::before{display:none}
+.reading.is-oz .pager{max-width:420px;margin-left:auto;margin-right:auto}
+.oz{max-width:420px;margin:2px auto 0;border-radius:24px;padding:18px 16px 14px;position:relative;overflow:hidden;
+  background:radial-gradient(120% 60% at 50% 0%,rgba(150,170,240,.20),transparent 60%),linear-gradient(180deg,#0F1638 0%,#090D22 100%);
+  border:1px solid var(--line2);box-shadow:0 30px 60px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.03) inset}
+.oz .stars{position:absolute;inset:0;pointer-events:none;opacity:.55;background-image:radial-gradient(1px 1px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 82% 10%,#fff,transparent),radial-gradient(1.4px 1.4px at 68% 30%,#fff,transparent),radial-gradient(1px 1px at 30% 8%,#dfe6ff,transparent),radial-gradient(1px 1px at 92% 46%,#fff,transparent),radial-gradient(1px 1px at 6% 52%,#dfe6ff,transparent)}
+.oz-top{text-align:center;position:relative}
+.oz-top .ey{font-size:.62rem;font-weight:600;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
+.oz-top h3{font-size:2.3rem;line-height:1;margin:.3rem 0 0}
+.oz-top .ar{display:block;font-size:1.5rem;color:var(--silver);line-height:1.25}
+.oz-top .eb{display:inline-block;margin-top:.35rem;font-size:.74rem;color:var(--silver2);border:1px solid var(--line2);border-radius:999px;padding:.15rem .7rem}
+.oz-pills{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:12px 0 10px;position:relative}
+.oz-pill{text-align:center;border:1px solid var(--line);border-radius:12px;padding:7px 4px;background:rgba(255,255,255,.03)}
+.oz-pill small{display:block;font-size:.58rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.oz-pill b{display:block;font-family:var(--f-head);font-size:1.05rem;color:var(--moon);font-weight:600;line-height:1.2;margin-top:2px}
+.reading .oz-quote{font-family:var(--f-head);font-style:italic;font-size:1.06rem;line-height:1.3;color:var(--moon);text-align:center;margin:0 4px 12px;max-width:none;position:relative}
+.oz-quote span{display:block;font-style:normal;font-family:var(--f-body);font-size:.8rem;color:var(--silver2);margin-top:4px}
+.oz-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;position:relative}
+.oz-b{border:1px solid var(--line);border-radius:14px;padding:9px 10px;background:rgba(5,8,22,.5);min-width:0}
+.oz-b .h{display:flex;align-items:center;gap:6px;font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.oz-b .h svg{width:14px;height:14px;color:var(--silver)}
+.reading .oz-b p{margin:0;max-width:none;font-size:.78rem;line-height:1.38;color:var(--text)}
+.oz-b p b{color:var(--moon);font-weight:600}
+.oz-b.w{grid-column:1 / -1}
+.oz-esma{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px;padding:10px 12px;border-radius:14px;position:relative;
+  background:linear-gradient(90deg,rgba(246,243,236,.12),rgba(246,243,236,.04));border:1px solid var(--line2)}
+.oz-esma b{font-family:var(--f-head);font-size:1.35rem;color:var(--moon);font-weight:700;line-height:1.1}
+.oz-esma small{display:block;font-size:.72rem;color:var(--silver2)}
+.oz-esma .n{font-family:var(--f-head);font-size:1.6rem;color:var(--moon);font-weight:700;text-align:right;line-height:1}
+.oz-esma .n small{display:block;margin-top:2px;font-family:var(--f-body);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.oz-foot{text-align:center;font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:10px;position:relative}
 footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-size:.76rem;max-width:40em;margin:0 auto;padding:26px 16px calc(26px + env(safe-area-inset-bottom,0px))}
 
 .fade{animation:fade .45s ease both}
@@ -308,14 +347,16 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
   <div class="facts" id="cetvel"></div>
   <details>
     <summary>Harfler nasıl sayılıyor?</summary>
-    <p>Her Türkçe harf, eski yazıdaki karşılığı olan harfe çevrilir ve o harfin ebced değeri toplanır. Eski yazıda sesli harflerin çoğu yazılmadığından gerçek imlâ biraz farklı olabilir; bu hesap her harfi saydığı için sonucu bir yaklaşımdır.</p>
-    <div class="tablewrap"><table id="harfTablo"><thead><tr><th>Türkçe</th><th>Harfin adı</th><th>Ebced</th><th>Tabiatı</th></tr></thead><tbody></tbody></table></div>
+    <p>Ebced, ismin eski yazıdaki imlâsıyla sayılır. Yaygın isimlerin bilinen Arapça ve Osmanlıca yazılışları sözlükten alınır (Ayşe عائشه, Şeyma شيما gibi). Sözlükte olmayan isimler Osmanlı Türkçesi imlâ usulüyle yazılır: kalın ünlülerin yanında ق ط ص غ, incelerin yanında ك ت س گ kullanılır, kelime içindeki e ve ı çoğunlukla yazılmaz. Her harfin değeri aşağıdaki cetveldedir.</p>
+    <div class="tablewrap"><table id="harfTablo"><thead><tr><th>Harf</th><th>Adı</th><th>Ebced</th><th>Tabiatı</th></tr></thead><tbody></tbody></table></div>
   </details>
 </template>
 
 <script src="kitap-burc.js"></script>
 <script src="kitap-yildiz.js"></script>
+<script src="kitap-hane.js"></script>
 <script src="motor.js"></script>
+<script src="isimler.js"></script>
 <script src="yerler.js"></script>
 <script>
 (function(){
@@ -383,10 +424,39 @@ const degIn=lon=>`${Math.floor(lon%30)}°`;
 function fmtClock(ts,tz){ return new Intl.DateTimeFormat("tr-TR",{timeZone:tz,hour:"2-digit",minute:"2-digit"}).format(new Date(ts)); }
 function moonPhase(e){ e=n360(e); if(e<12) return "İçtimâ (ay karanlığı)"; if(e<85) return "Hilâl, büyüyen ay"; if(e<100) return "İlk terbî' (yarım ay)"; if(e<168) return "Büyüyen ay, bedre giderken"; if(e<192) return "Bedr (dolunay)"; if(e<265) return "Küçülen ay"; if(e<280) return "Son terbî' (yarım ay)"; if(e<348) return "Hilâl, küçülen ay"; return "İçtimâ (ay karanlığı)"; }
 
+
+/* ---------- Seyyâreler (JPL yaklaşık yörünge unsurları, 1800-2050) ---------- */
+const ORB={ // a, e, I, L, uzun.perihel, uzun.düğüm ; yüzyıllık değişimler
+  Utarid:[[0.38709927,0.20563593,7.00497902,252.25032350,77.45779628,48.33076593],[0.00000037,0.00001906,-0.00594749,149472.67411175,0.16047689,-0.12534081]],
+  Zuhre:[[0.72333566,0.00677672,3.39467605,181.97909950,131.60246718,76.67984255],[0.00000390,-0.00004107,-0.00078890,58517.81538729,0.00268329,-0.27769418]],
+  Arz:[[1.00000261,0.01671123,-0.00001531,100.46457166,102.93768193,0],[0.00000562,-0.00004392,-0.01294668,35999.37244981,0.32327364,0]],
+  Mirrih:[[1.52371034,0.09339410,1.84969142,-4.55343205,-23.94362959,49.55953891],[0.00001847,0.00007882,-0.00813131,19140.30268499,0.44441088,-0.29257343]],
+  Musteri:[[5.20288700,0.04838624,1.30439695,34.39644051,14.72847983,100.47390909],[-0.00011607,-0.00013253,-0.00183714,3034.74612775,0.21252668,0.20469106]],
+  Zuhal:[[9.53667594,0.05386179,2.48599187,49.95424423,92.59887831,113.66242448],[-0.00125060,-0.00050991,0.00193609,1222.49362201,-0.41897216,-0.28867794]]
+};
+function helio(k,T){ const [e0,d]=ORB[k]; const el=e0.map((v,i)=>v+d[i]*T); const [a,e,I,L,wb,O]=el;
+  const w=wb-O; let M=n360(L-wb); if(M>180) M-=360; const Mr=r(M); let E=Mr+e*Math.sin(Mr);
+  for(let i=0;i<8;i++) E=E-(E-e*Math.sin(E)-Mr)/(1-e*Math.cos(E));
+  const xp=a*(Math.cos(E)-e), yp=a*Math.sqrt(1-e*e)*Math.sin(E);
+  const cw=Math.cos(r(w)),sw=Math.sin(r(w)),cO=Math.cos(r(O)),sO=Math.sin(r(O)),cI=Math.cos(r(I)),sI=Math.sin(r(I));
+  return [(cw*cO-sw*sO*cI)*xp+(-sw*cO-cw*sO*cI)*yp,(cw*sO+sw*cO*cI)*xp+(-sw*sO+cw*cO*cI)*yp,(sw*sI)*xp+(cw*sI)*yp]; }
+function geoLon(k,ts){ const T=(JD(ts)-2451545)/36525; const p=helio(k,T), q=helio("Arz",T);
+  return n360(deg(Math.atan2(p[1]-q[1],p[0]-q[0]))+1.3972*T); }
+const SEYYARE=["Sems","Kamer","Utarid","Zuhre","Mirrih","Musteri","Zuhal"];
+function lonOf(k,ts){ const d=JD(ts)-2451545; return k==="Sems"?sunLon(d):k==="Kamer"?moonLon(d):geoLon(k,ts); }
+const BEYT={Zuhal:["Cedy","Delv"],Musteri:["Kavs","Hût"],Mirrih:["Hamel","Akreb"],Sems:["Esed"],Zuhre:["Sevr","Mîzân"],Utarid:["Cevzâ","Sünbüle"],Kamer:["Seretân"]};
+const SEREF={Sems:"Hamel",Kamer:"Sevr",Zuhal:"Mîzân",Musteri:"Seretân",Mirrih:"Cedy",Zuhre:"Hût",Utarid:"Sünbüle"};
+function haliOf(k,bi){ const b=BURC[bi][0], kar=BURC[(bi+6)%12][0];
+  if(BEYT[k].includes(b)) return "beyt"; if(SEREF[k]===b) return "şeref"; if(BEYT[k].includes(kar)) return "vebâl"; if(SEREF[k]===kar) return "hubût"; return ""; }
+function seyyareler(ts,ascI){ return SEYYARE.map(k=>{ const lon=lonOf(k,ts), bi=Math.floor(lon/30);
+  const raci=(k!=="Sems"&&k!=="Kamer")&&(()=>{ const a=lonOf(k,ts-43200000), b=lonOf(k,ts+43200000); let dd=b-a; if(dd>180) dd-=360; if(dd<-180) dd+=360; return dd<0; })();
+  return {k,lon,bi,hane:ascI==null?null:((bi-ascI+12)%12)+1,hal:haliOf(k,bi),raci}; }); }
+
 /* ---------- Hesap ---------- */
 function compute(inp){
-  const nm=analyze(trToArabic(inp.ad));
-  const an=analyze(trToArabic(inp.anne));
+  const yzA=ISIM.yaz(inp.ad), yzB=ISIM.yaz(inp.anne);
+  const nm=analyze(yzA.ar); nm.yaz=yzA;
+  const an=analyze(yzB.ar); an.yaz=yzB;
   const top=nm.total+an.total;
   const k12=((top-1)%12)+1, k7=((top-1)%7)+1, k4=top%4;
   const isimBurc=BURC[k12-1], isimYildiz=CHALDEAN[k7-1], isimUnsur=["Su","Ateş","Toprak","Hava"][k4];
@@ -410,7 +480,12 @@ function compute(inp){
   const geceAdi=gece?`${GUN[(dayIdx+1)%7]} gecesi (${GUN[dayIdx]} akşamından sonraki gece)`:`${GUN[dayIdx]} günü, gündüz`;
   let hicri=""; try{ hicri=new Intl.DateTimeFormat("tr-TR-u-ca-islamic-umalqura",{day:"numeric",month:"long",year:"numeric"}).format(new Date(t)); }catch(e){}
   const el={Ateş:0,Hava:0,Su:0,Toprak:0}; for(const k in el) el[k]=nm.el[k]+an.el[k];
-  return {inp,nm,an,top,isimBurc,isimYildiz,isimUnsur,k12,k7,city,cityKnown,tz,sun,moon,asc,node,dayRuler,hourRuler,hourIdx,gece,geceAdi,hicri,el,
+  // galip unsur: harf sayımı esastır; eşitlikte dörde bölümün unsuru tercih edilir
+  const galip=Object.keys(el).sort((a,b)=>el[b]-el[a]||(b===isimUnsur)-(a===isimUnsur))[0];
+  const ascI=Math.floor(asc/30);
+  const gez=seyyareler(t,inp.saatYok?null:ascI);
+  const now=Date.now(); const gecis=["Zuhal","Musteri"].map(k=>{ const lon=lonOf(k,now), bi=Math.floor(lon/30); return {k,lon,bi,hane:inp.saatYok?null:((bi-ascI+12)%12)+1}; });
+  return {inp,nm,an,top,galip,gez,gecis,isimBurc,isimYildiz,isimUnsur,k12,k7,city,cityKnown,tz,sun,moon,asc,node,dayRuler,hourRuler,hourIdx,gece,geceAdi,hicri,el,
     sunSign:signOf(sun),moonSign:signOf(moon),ascSign:signOf(asc),menzil:MENAZIL[Math.floor(moon/(360/28))],menzilNo:Math.floor(moon/(360/28))+1,
     phase:moonPhase(moon-sun),rise:fmtClock(st.rise,tz),set:fmtClock(st.set,tz),
     esmaAd:nearestEsma(nm.total,3),esmaTop:nearestEsma(top,2)};
@@ -459,14 +534,15 @@ const ICON={
 /* ---------- Sekmeler ---------- */
 // kaynak bölüm ve alt başlık sırası; seçilmeyen alt başlık o bölümün ilk sekmesine eklenir
 const TABS=[
+  {id:"ozet",t:"Özet",title:"Özet",src:null,d:""},
   {id:"karakter",t:"Karakter",title:"Karakter ve Kader",src:"karakter",pick:null,d:"İç yapın, gizli huyların, öfke ve merhamet terazin, ana imtihanın."},
   {id:"ask",t:"Aşk",title:"Aşk ve Gönül",src:"evlilik",pick:[1,2,5],d:"Kaç büyük aşk, ruh eşi, sadakat ve kıskançlık."},
-  {id:"evlilik",t:"Evlilik",title:"Evlilik ve Eş",src:"evlilik",pick:[0,3,4,6,7],d:"Eşinin harfleri ve hâli, yuvanın huzuru, ayrılık ve zaman."},
+  {id:"evlilik",t:"Evlilik",title:"Evlilik ve Eş",src:"evlilik",pick:[0,3,4,6,7,8],d:"Eşinin harfleri ve hâli, yuvanın huzuru, ayrılık ve zaman."},
   {id:"cocuk",t:"Çocuk ve yuva",title:"Çocuk ve Yuva",src:"cocuk",pick:null,d:"Evlât kısmeti, ana baba rolü, hanenin bereketi."},
-  {id:"is",t:"İş",title:"Meslek ve Ortaklık",src:"is",pick:[0,3],d:"Yatkın olduğun sanat, ortaklıkta dikkat edilecekler."},
-  {id:"para",t:"Para",title:"Kazanç ve Rızık",src:"is",pick:[1,2,4,5],d:"Rızkın kapısı, para tutma, bolluk ve darlık devirleri."},
-  {id:"harf",t:"Harfler ve yıldız",title:"İlm-i Hurûf ve Yıldızname",src:"hurif",pick:[0,1,2,3,4,5],d:"Ebced hesabın, harflerinin tabiatı, esmân."},
-  {id:"kismet",t:"Nazar ve kısmet",title:"Kader İzleri, Nazar ve Kısmet",src:"hurif",pick:[6,7,8,9,10,11],d:"Gezegen saati, düğümler, ruhsal yük, nazar ve kısmet."},
+  {id:"is",t:"İş",title:"Meslek ve Ortaklık",src:"is",pick:[0,3,6],d:"Yatkın olduğun sanat, ortaklıkta dikkat edilecekler."},
+  {id:"para",t:"Para",title:"Kazanç ve Rızık",src:"is",pick:[1,2,4,5,7],d:"Rızkın kapısı, para tutma, bolluk ve darlık devirleri."},
+  {id:"harf",t:"Harfler ve yıldız",title:"İlm-i Hurûf ve Yıldızname",src:"hurif",pick:[0,1,2,3,4,5,12],d:"Ebced hesabın, harflerinin tabiatı, esmân."},
+  {id:"kismet",t:"Nazar ve kısmet",title:"Kader İzleri, Nazar ve Kısmet",src:"hurif",pick:[6,7,8,9,10,11,13],d:"Gezegen saati, düğümler, ruhsal yük, nazar ve kısmet."},
   {id:"cetvel",t:"Hesap cetveli",title:"Hesap Cetveli",src:null,d:""}
 ];
 function buildTabs(S){
@@ -478,7 +554,7 @@ function buildTabs(S){
   // kalanlar
   S.forEach(s=>{ const u=used[s.id]||new Set(); const rest=s.subs.filter((_,i)=>!u.has(i)); if(!rest.length) return;
     const first=out.find(t=>t.src===s.id); if(first) first.subs.push(...rest); });
-  return out.filter(t=>t.id==="cetvel"||t.subs.length);
+  return out.filter(t=>!t.src||t.subs.length);
 }
 
 /* ---------- Tanıtım kartları ---------- */
@@ -489,23 +565,24 @@ function buildTabs(S){
 })();
 
 /* ---------- Cetvel ---------- */
-function tilesOf(name){ const out=[]; for(const ch of norm(name)){ const a=TR[ch]; if(!a) continue; for(const g of a){ const b=BASE[g]||g; out.push({tr:ch,ad:NAME[g]||NAME[b],v:VAL[b],el:ELEM[b]}); } } return out; }
-function nameBox(who,name,total){
-  const box=el("div","namebox"); const w=el("div","who"); w.appendChild(el("span",null,who)); w.appendChild(el("b",null,`${name} · ${total}`)); box.appendChild(w);
-  const t=el("div","tiles"); tilesOf(name).forEach(x=>{ const d=el("div","tile"); d.title=`${x.ad}, ${x.el}`;
-    d.appendChild(el("span","t",x.tr.toLocaleUpperCase("tr"))); d.appendChild(el("span","n",x.ad)); d.appendChild(el("span","v",String(x.v))); t.appendChild(d); });
+function tilesOf(an){ return an.letters.map(l=>({g:l.g,ad:NAME[l.g]||NAME[l.b],v:VAL[l.b],el:ELEM[l.b]})); }
+function nameBox(who,name,an){
+  const box=el("div","namebox"); const w=el("div","who"); w.appendChild(el("span",null,who)); const bb=el("b",null,`${name} `); const ar=el("span","ar",an.yaz.ar); ar.lang="ar"; ar.dir="rtl"; bb.appendChild(ar); bb.appendChild(document.createTextNode(` · ${an.total}`)); w.appendChild(bb); box.appendChild(w);
+  if(an.yaz.kaynak!=="sözlük") box.appendChild(el("div","yazk","Bu isim eski yazıdaki bilinen yazılışlar arasında bulunmadığı için Osmanlı imlâsı usulüyle yazıldı."));
+  const t=el("div","tiles"); t.dir="rtl"; tilesOf(an).forEach(x=>{ const d=el("div","tile"); d.title=`${x.ad}, ${x.el}`;
+    d.appendChild(el("span","t ar",x.g)); d.appendChild(el("span","n",x.ad)); d.appendChild(el("span","v",String(x.v))); t.appendChild(d); });
   box.appendChild(t); return box;
 }
 function fact(k,v,n,wide){ const d=el("div","fact"+(wide?" wide":"")); d.appendChild(el("div","k",k)); d.appendChild(el("div","v",v)); if(n) d.appendChild(el("div","n",n)); return d; }
 function renderCetvel(c,root){
   const nb=root.querySelector("#names");
-  nb.appendChild(nameBox("Senin adın",c.inp.ad,c.nm.total));
-  nb.appendChild(nameBox("Annenin adı",c.inp.anne,c.an.total));
+  nb.appendChild(nameBox("Senin adın",c.inp.ad,c.nm));
+  nb.appendChild(nameBox("Annenin adı",c.inp.anne,c.an));
   const box=root.querySelector("#cetvel");
-  const elsS=Object.entries(c.el).sort((a,b)=>b[1]-a[1]);
+
   const sy=c.inp.saatYok;
   box.appendChild(fact("Ebced toplamı",String(c.top),`İsim burcu ${c.isimBurc[0]} (${c.isimBurc[1]}), isim yıldızı ${PLANETS[c.isimYildiz].ad}`));
-  box.appendChild(fact("Galip unsur",elsS[0][0],`Ateş ${c.el.Ateş} · Hava ${c.el.Hava} · Su ${c.el.Su} · Toprak ${c.el.Toprak}`));
+  box.appendChild(fact("Galip unsur",c.galip,`${c.isimUnsur===c.galip?"Dörde bölüm de aynı unsuru verir. ":`Dörde bölüm ${c.isimUnsur} verir; esas harf sayımıdır. `}Ateş ${c.el.Ateş} · Hava ${c.el.Hava} · Su ${c.el.Su} · Toprak ${c.el.Toprak}`));
   box.appendChild(fact("Güneş burcu",`${c.sunSign[0]} (${c.sunSign[1]})`,`${degIn(c.sun)}, sâhibi ${PLANETS[c.sunSign[3]].ad}`));
   box.appendChild(fact("Tâli' (yükselen)",`${c.ascSign[0]} (${c.ascSign[1]})`,sy?"Saat bilinmediği için belirsiz":`${degIn(c.asc)}, yaklaşık hesap`));
   box.appendChild(fact("Ay ve menzil",`${c.moonSign[1]}, ${c.menzil}`,`${c.menzilNo}. menzil. ${c.phase}`));
@@ -513,11 +590,40 @@ function renderCetvel(c,root){
   box.appendChild(fact("Kadersel düğümler",`Re's ${signOf(c.node)[1]}`,`Zeneb ${signOf(n360(c.node+180))[1]}`));
   box.appendChild(fact("Esmâ",`Yâ ${c.esmaAd[0].tr}`,c.esmaAd.map(x=>`${x.tr} ${x.v}`).join(" · ")));
   if(c.hicri) box.appendChild(fact("Hicrî doğum",c.hicri,null));
+  box.appendChild(fact("Seyyâreler",c.gez.map(g=>`${PLANETS[g.k].ad} ${BURC[g.bi][1]}`).join(" · "),c.gez.map(g=>`${PLANETS[g.k].ad}: ${BURC[g.bi][0]} ${degIn(g.lon)}${g.hane?`, ${g.hane}. hâne`:""}${g.hal?`, ${g.hal}`:""}${g.raci?", râci'":""}`).join(" · "),true));
+  box.appendChild(fact("Bugünkü gök",`Zühal ${BURC[c.gecis[0].bi][1]}, Müşterî ${BURC[c.gecis[1].bi][1]}`,c.gecis[0].hane?`Zühal senin ${c.gecis[0].hane}., Müşterî ${c.gecis[1].hane}. hânenden geçiyor`:"Doğum saati bilinmediği için hâne verilemedi",true));
   if(c.cityKnown) box.appendChild(fact("Doğum yeri",c.city[0],`${dms(c.city[1],"K","G")}, ${dms(c.city[2],"D","B")} · ${c.tz} · güneş doğuşu ${c.rise}, batışı ${c.set}`,true));
   else box.appendChild(fact("Doğum yeri","Bulunamadı","Yazdığın yer listede çıkmadı; hesap Ankara'ya göre yaklaşık yapıldı. Listeden seçersen daha doğru olur.",true));
   const tb=root.querySelector("#harfTablo tbody");
-  TR_ROWS.forEach(([tr,ar])=>{ const b=BASE[ar]||ar; const row=el("tr");
-    [tr,NAME[ar]||NAME[b],String(VAL[b])+(ar!==b?` (${NAME[b]} gibi)`:""),ELEM[b]].forEach(v=>row.appendChild(el("td",null,v))); tb.appendChild(row); });
+  Object.keys(VAL).forEach(ar=>{ const row=el("tr"); const g=el("td","ar",ar); g.lang="ar"; row.appendChild(g);
+    [NAME[ar],String(VAL[ar]),ELEM[ar]].forEach(v=>row.appendChild(el("td",null,v))); tb.appendChild(row); });
+}
+
+
+const OZI={
+  ask:ICON.ask, cocuk:ICON.cocuk, para:ICON.para, kismet:ICON.kismet, karakter:ICON.karakter,
+  ugur:SVG(`<path d="M16 3l3.2 7.8L27 12l-6 5.4L22.6 26 16 21.8 9.4 26 11 17.4 5 12l7.8-1.2z"/>`)
+};
+function renderOzet(c,root){
+  const o=c.ozet, card=el("div","oz"); card.appendChild(el("div","stars"));
+  const top=el("div","oz-top"); top.appendChild(el("div","ey","Yıldızname-i"));
+  top.appendChild(el("h3",null,o.ad)); const ar=el("span","ar",o.yazilis); ar.lang="ar"; ar.dir="rtl"; top.appendChild(ar);
+  top.appendChild(el("span","eb",`valide ${o.anne} · ebced ${o.ebced}`)); card.appendChild(top);
+  const pills=el("div","oz-pills"); [["İsim burcu",o.isimBurc.split(" (")[0]],["Unsur",o.unsur],["Yıldız",o.yildiz]].forEach(([k,v])=>{ const d=el("div","oz-pill"); d.appendChild(el("small",null,k)); d.appendChild(el("b",null,v)); pills.appendChild(d); }); card.appendChild(pills);
+  const q=el("p","oz-quote",o.oz); q.appendChild(el("span",null,o.imtihan)); card.appendChild(q);
+  const g=el("div","oz-grid");
+  const blok=(ic,h,html,w)=>{ const b=el("div","oz-b"+(w?" w":"")); const hh=el("div","h"); hh.innerHTML=OZI[ic]; hh.appendChild(document.createTextNode(h)); b.appendChild(hh); const p=el("p"); p.innerHTML=html; b.appendChild(p); g.appendChild(b); };
+  const e=t=>String(t).replace(/[&<>"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
+  blok("ask","Aşk ve evlilik",`${e(o.ask)} <b>Nikâh vakti: ${e(o.evlilikYas)}.</b> ${e(o.yedi)}.`,true);
+  blok("cocuk","Evlât",`<b>${e(o.evlat)}</b>, ${e(o.evlatCins)}.${o.bes?" "+e(o.bes)+".":""}`);
+  blok("para","Rızık",`${e(o.rizik)}. ${e(o.meslek)}.`);
+  blok("kismet","Bu devir",`${e(o.devir)}. Kısmet: <b>${e(o.kismet)}</b>.`);
+  blok("ugur","Uğurlu",`<b>${e(o.gun)}</b> günü. Renk: ${e(o.renk)}. Taş: ${e(o.tas)}.`);
+  card.appendChild(g);
+  const es=el("div","oz-esma"); const l=el("div"); l.appendChild(el("small",null,"Okunacak esmâ")); l.appendChild(el("b",null,o.esma)); if(o.esmaMana) l.appendChild(el("small",null,o.esmaMana)); es.appendChild(l);
+  const n=el("div","n",String(o.esmaSay)); n.appendChild(el("small",null," kere")); es.appendChild(n); card.appendChild(es);
+  card.appendChild(el("div","oz-foot","Ayrıntılar sonraki sekmelerde"));
+  root.appendChild(card);
 }
 
 /* ---------- Fal ekranı ---------- */
@@ -535,10 +641,12 @@ function showTab(i,scroll){
   const act=tabsEl.children[i]; if(act){ const L=act.offsetLeft-16, R=act.offsetLeft+act.offsetWidth+16;
     if(L<tabsEl.scrollLeft||R>tabsEl.scrollLeft+tabsEl.clientWidth) tabsEl.scrollTo({left:L-tabsEl.clientWidth/2+act.offsetWidth/2,behavior:still()?"auto":"smooth"}); }
   okuma.setAttribute("aria-labelledby","tab-"+T.id);
-  okuma.textContent=""; okuma.classList.remove("fade"); void okuma.offsetWidth; okuma.classList.add("fade");
-  const hd=el("div","rtitle"); const ic=el("div","ic"); ic.innerHTML=ICON[T.id]; hd.appendChild(ic);
-  const w=el("div"); w.appendChild(el("small",null,`Bâb ${i+1} / ${TL.length}`)); w.appendChild(el("h3",null,T.title)); hd.appendChild(w); okuma.appendChild(hd);
-  if(T.id==="cetvel"){ const frag=$("cetvelTpl").content.cloneNode(true); renderCetvel(CUR,frag); okuma.appendChild(frag); }
+  okuma.textContent=""; okuma.classList.toggle("is-oz",T.id==="ozet"); okuma.classList.remove("fade"); void okuma.offsetWidth; okuma.classList.add("fade");
+  if(T.id==="ozet"){ renderOzet(CUR,okuma); }
+  const hd=el("div","rtitle"); if(T.id!=="ozet"){ const ic=el("div","ic"); ic.innerHTML=ICON[T.id]; hd.appendChild(ic);
+  const w=el("div"); w.appendChild(el("small",null,`Bâb ${i+1} / ${TL.length}`)); w.appendChild(el("h3",null,T.title)); hd.appendChild(w); okuma.appendChild(hd); }
+  if(T.id==="ozet"){}
+  else if(T.id==="cetvel"){ const frag=$("cetvelTpl").content.cloneNode(true); renderCetvel(CUR,frag); okuma.appendChild(frag); }
   else T.subs.forEach(s=>{ okuma.appendChild(el("h4",null,s.h)); s.p.forEach(t=>okuma.appendChild(el("p",null,t))); });
   const pg=el("div","pager");
   const pv=el("button",null,i>0?`← ${TL[i-1].t}`:""); pv.type="button"; pv.disabled=i===0; pv.addEventListener("click",()=>showTab(i-1,true));
@@ -550,7 +658,7 @@ function showTab(i,scroll){
 function run(c){
   CUR=c;
   const S=FAL.oku(c,{BURC,NAME,esmaVal:n=>{ const x=ESMA_V.find(e=>e.tr===n); return x?x.v:0; }});
-  TL=buildTabs(S); cur=0;
+  c.ozet=S.ozet; TL=buildTabs(S); cur=0;
   const zaman=`${tarihYaz(c.inp.tarih)}${c.inp.saatYok?", saat bilinmiyor":", "+c.inp.saat}`;
   $("sonucH").textContent=c.inp.ad;
   $("sonucKim").textContent=`Valide ${c.inp.anne} · ${zaman} · ${c.city[0]}`;
@@ -562,7 +670,7 @@ function run(c){
   k.appendChild(key("Güneş",c.sunSign[1]));
   k.appendChild(key("Ay menzili",c.menzil));
   k.appendChild(key("Esmâ",`Yâ ${c.esmaAd[0].tr}`));
-  $("saatNot").hidden=!c.inp.saatYok;
+  $("saatNot").hidden=!c.inp.saatYok; k.hidden=true;
   drawTabs(); $("intro").hidden=true; $("sonuc").hidden=false; layout.classList.add("has-result");
   showTab(0,false); setStatus("");
   requestAnimationFrame(()=>{ const top=$("sonuc").getBoundingClientRect().top+scrollY-12; window.scrollTo({top:Math.max(0,top),behavior:still()?"auto":"smooth"}); });
