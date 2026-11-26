@@ -253,13 +253,99 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
   .top{padding:22px 28px 14px}
   .layout{grid-template-columns:380px minmax(0,1fr);gap:26px;padding:4px 28px 0}
   .side{position:sticky;top:20px}
-  .formsum{display:none!important}
+  .layout:not(.has-result) .formsum{display:none!important}
   .form{padding:24px 22px 20px}
   .tabs{margin:14px 0 0;padding:10px 0;border-radius:0;background:linear-gradient(180deg,rgba(7,10,22,.97),rgba(7,10,22,.9))}
   .rhead{padding:26px 30px 22px}
   .keys{grid-template-columns:repeat(5,1fr)}
   .key:last-child:nth-child(odd){grid-column:auto}
   .reading p{font-size:1.06rem}
+}
+
+/* ================= Renk ve yerleşim (v8) ================= */
+:root{
+  --night:#0B0819; --night2:#150F33;
+  --rose:#EBB0BC; --rose2:#C9788F; --amber:#F2CB9C; --lav:#BBAAF0; --teal:#8FD6CF; --sage:#BFD3A0;
+  --panel:rgba(18,13,40,.80); --field:rgba(9,6,22,.6);
+}
+html{background:var(--night)}
+body{background:
+  radial-gradient(55% 45% at 92% -4%,rgba(235,176,188,.20),transparent 62%),
+  radial-gradient(60% 55% at -6% 104%,rgba(150,52,104,.34),transparent 64%),
+  radial-gradient(45% 40% at 70% 92%,rgba(242,203,156,.10),transparent 60%),
+  radial-gradient(90% 70% at 15% 0%,#1E1852 0%,#150F33 42%,#0B0819 86%) fixed,var(--night)}
+.eyebrow,.oz-top .ey{color:var(--rose)}
+.tag{color:var(--rose);opacity:.8}
+.brand b i{color:var(--rose)}
+.reading h4::before{border-color:var(--amber);background:rgba(242,203,156,.25)}
+.rtitle .ic,.chip .ic{color:var(--amber);border-color:rgba(242,203,156,.35);background:radial-gradient(circle at 50% 35%,rgba(242,203,156,.16),transparent 70%)}
+.rtitle small{color:var(--rose)}
+.tab[aria-selected=true]{background:linear-gradient(135deg,#FFF6EF 0%,#F6D6D3 60%,#EBB7BF 100%);border-color:#F3CFCF;color:#2A1030}
+.tab:hover{border-color:rgba(235,176,188,.5)}
+.btn{color:#2A1030;background:linear-gradient(180deg,#FFF8F2 0%,#F6DCD6 55%,#E7B2BC 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.6) inset,0 12px 30px -10px rgba(235,176,188,.55)}
+.btn:hover{box-shadow:0 0 0 1px rgba(255,255,255,.7) inset,0 16px 40px -10px rgba(235,176,188,.75)}
+.f input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(235,176,188,.16)}
+.check input:checked{background:var(--rose);border-color:var(--rose)}
+.panel::before{background:linear-gradient(150deg,rgba(255,220,225,.24),rgba(255,255,255,0) 30%,rgba(255,255,255,0) 70%,rgba(242,203,156,.12))}
+.placecard .ok{color:var(--teal)}
+.fact .k,.key .k,.namebox .who{color:var(--amber)}
+.tabs{background:linear-gradient(180deg,rgba(11,8,25,.96),rgba(11,8,25,.88))}
+.pager button:hover{color:var(--rose)}
+.notice{border-left-color:var(--amber)}
+
+/* yalnız not */
+.rhead.only-note .eyebrow,.rhead.only-note h2,.rhead.only-note .meta{display:none}
+.rhead.only-note{padding:12px 16px}
+.rhead.only-note .notice{margin:0}
+/* fal açılınca form kapanır, fal tüm genişliği kullanır */
+.formsum{gap:14px;padding:12px 16px}
+.formsum .acts{display:flex;gap:8px;flex:none}
+.ghost.pri{background:linear-gradient(135deg,rgba(235,176,188,.22),rgba(242,203,156,.14));border-color:rgba(235,176,188,.45)}
+@media (min-width:1100px){
+  .layout.has-result{grid-template-columns:minmax(0,1fr);max-width:1180px}
+  .layout.has-result .side{position:static}
+  .layout.has-result .side .form{display:none}
+  .layout.has-result .formsum{display:flex}
+  .layout.has-result .formsum b{font-size:1.4rem}
+}
+
+/* ---- Özet kartı v2 ---- */
+.oz{background:
+  radial-gradient(90% 45% at 50% 0%,rgba(235,176,188,.22),transparent 62%),
+  radial-gradient(70% 40% at 100% 100%,rgba(150,52,104,.30),transparent 65%),
+  linear-gradient(180deg,#211544 0%,#140D2C 55%,#0E0920 100%);
+  border-color:rgba(235,176,188,.28)}
+.oz::after{content:"";position:absolute;left:12%;right:12%;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--amber),transparent);opacity:.7}
+.oz-top h3{background:linear-gradient(180deg,#FFF8F2,#F3CFCF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.oz-top .ar{color:var(--amber)}
+.oz-top .eb{border-color:rgba(235,176,188,.35)}
+.oz-pill.u-Ateş b{color:#F8B99A}.oz-pill.u-Su b{color:var(--teal)}.oz-pill.u-Hava b{color:var(--lav)}.oz-pill.u-Toprak b{color:var(--sage)}
+.oz-sky{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--line);margin:0 0 12px;position:relative}
+.oz-sky div{background:rgba(10,7,24,.75);padding:6px 4px;text-align:center;min-width:0}
+.oz-sky small{display:block;font-size:.56rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--rose)}
+.oz-sky b{display:block;font-family:var(--f-head);font-size:.98rem;color:var(--moon);font-weight:600;line-height:1.15;overflow-wrap:anywhere}
+.oz-muhur{position:relative;margin:0 0 8px;padding:8px 12px;border-radius:12px;border:1px dashed rgba(242,203,156,.45);text-align:center}
+.oz-muhur small{display:block;font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+.oz-muhur b{font-family:var(--f-head);font-size:1.08rem;color:var(--moon);font-weight:600}
+.oz-b .h svg{color:var(--amber)}
+.oz-b.c-rose{border-color:rgba(235,176,188,.35);background:linear-gradient(160deg,rgba(235,176,188,.10),rgba(9,6,22,.55))}
+.oz-b.c-rose .h,.oz-b.c-rose .h svg{color:var(--rose)}
+.oz-b.c-amber{border-color:rgba(242,203,156,.3);background:linear-gradient(160deg,rgba(242,203,156,.08),rgba(9,6,22,.55))}
+.reading .oz-b p i{color:var(--silver);font-style:italic}
+.oz-esma{background:linear-gradient(90deg,rgba(242,203,156,.18),rgba(235,176,188,.08));border-color:rgba(242,203,156,.4);margin-top:0}
+.oz-esma .n{color:var(--amber)}
+.oz-r{position:relative;margin-top:10px}
+@media (min-width:860px){
+  .oz{max-width:1000px;display:grid;grid-template-columns:330px minmax(0,1fr);gap:0 18px;padding:22px}
+  .oz-l{position:relative}
+  .oz-r{margin-top:0}
+  .oz-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .oz-b.w{grid-column:span 3}
+  .oz-b.w.c-amber{grid-column:span 1}
+  .reading .oz-b p{font-size:.84rem}
+  .oz-foot{grid-column:1 / -1}
+  .reading.is-oz .pager{max-width:1000px}
 }
 </style>
 </head>
@@ -312,7 +398,7 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
     </form>
     <div class="panel formsum" id="formSum">
       <div class="who"><b id="sumAd"></b><span id="sumDetay"></span></div>
-      <button type="button" class="ghost" id="duzenle">Düzenle</button>
+      <div class="acts"><button type="button" class="ghost" id="duzenle">Düzenle</button><button type="button" class="ghost pri" id="yeniFal">Yeni fal</button></div>
     </div>
   </aside>
 
@@ -541,8 +627,8 @@ const TABS=[
   {id:"cocuk",t:"Çocuk ve yuva",title:"Çocuk ve Yuva",src:"cocuk",pick:null,d:"Evlât kısmeti, ana baba rolü, hanenin bereketi."},
   {id:"is",t:"İş",title:"Meslek ve Ortaklık",src:"is",pick:[0,3,6],d:"Yatkın olduğun sanat, ortaklıkta dikkat edilecekler."},
   {id:"para",t:"Para",title:"Kazanç ve Rızık",src:"is",pick:[1,2,4,5,7],d:"Rızkın kapısı, para tutma, bolluk ve darlık devirleri."},
-  {id:"harf",t:"Harfler ve yıldız",title:"İlm-i Hurûf ve Yıldızname",src:"hurif",pick:[0,1,2,3,4,5,12],d:"Ebced hesabın, harflerinin tabiatı, esmân."},
-  {id:"kismet",t:"Nazar ve kısmet",title:"Kader İzleri, Nazar ve Kısmet",src:"hurif",pick:[6,7,8,9,10,11,13],d:"Gezegen saati, düğümler, ruhsal yük, nazar ve kısmet."},
+  {id:"harf",t:"Harfler ve yıldız",title:"İlm-i Hurûf ve Yıldızname",src:"hurif",pick:[0,1,2,3,4,5,12,13],d:"Ebced hesabın, harflerinin tabiatı, esmân."},
+  {id:"kismet",t:"Nazar ve kısmet",title:"Kader İzleri, Nazar ve Kısmet",src:"hurif",pick:[6,7,8,9,10,11,14],d:"Gezegen saati, düğümler, ruhsal yük, nazar ve kısmet."},
   {id:"cetvel",t:"Hesap cetveli",title:"Hesap Cetveli",src:null,d:""}
 ];
 function buildTabs(S){
@@ -602,26 +688,38 @@ function renderCetvel(c,root){
 
 const OZI={
   ask:ICON.ask, cocuk:ICON.cocuk, para:ICON.para, kismet:ICON.kismet, karakter:ICON.karakter,
-  ugur:SVG(`<path d="M16 3l3.2 7.8L27 12l-6 5.4L22.6 26 16 21.8 9.4 26 11 17.4 5 12l7.8-1.2z"/>`)
+  ugur:SVG(`<path d="M16 3l3.2 7.8L27 12l-6 5.4L22.6 26 16 21.8 9.4 26 11 17.4 5 12l7.8-1.2z"/>`),
+  es:SVG(`<circle cx="16" cy="11" r="5"/><path d="M6 27c1.5-5.5 5.5-8 10-8s8.5 2.5 10 8"/>`),
+  is:ICON.is,
+  donum:SVG(`<circle cx="16" cy="16" r="12"/><path d="M16 9v7l5 3"/>`),
+  dikkat:SVG(`<path d="M16 4l13 23H3z"/><path d="M16 13v6"/><circle cx="16" cy="23" r=".9" fill="currentColor"/>`)
 };
 function renderOzet(c,root){
   const o=c.ozet, card=el("div","oz"); card.appendChild(el("div","stars"));
+  const e=t=>String(t==null?"":t).replace(/[&<>"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
+  const L=el("div","oz-l"), Rr=el("div","oz-r");
   const top=el("div","oz-top"); top.appendChild(el("div","ey","Yıldızname-i"));
   top.appendChild(el("h3",null,o.ad)); const ar=el("span","ar",o.yazilis); ar.lang="ar"; ar.dir="rtl"; top.appendChild(ar);
-  top.appendChild(el("span","eb",`valide ${o.anne} · ebced ${o.ebced}`)); card.appendChild(top);
-  const pills=el("div","oz-pills"); [["İsim burcu",o.isimBurc.split(" (")[0]],["Unsur",o.unsur],["Yıldız",o.yildiz]].forEach(([k,v])=>{ const d=el("div","oz-pill"); d.appendChild(el("small",null,k)); d.appendChild(el("b",null,v)); pills.appendChild(d); }); card.appendChild(pills);
-  const q=el("p","oz-quote",o.oz); q.appendChild(el("span",null,o.imtihan)); card.appendChild(q);
-  const g=el("div","oz-grid");
-  const blok=(ic,h,html,w)=>{ const b=el("div","oz-b"+(w?" w":"")); const hh=el("div","h"); hh.innerHTML=OZI[ic]; hh.appendChild(document.createTextNode(h)); b.appendChild(hh); const p=el("p"); p.innerHTML=html; b.appendChild(p); g.appendChild(b); };
-  const e=t=>String(t).replace(/[&<>"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
-  blok("ask","Aşk ve evlilik",`${e(o.ask)} <b>Nikâh vakti: ${e(o.evlilikYas)}.</b> ${e(o.yedi)}.`,true);
-  blok("cocuk","Evlât",`<b>${e(o.evlat)}</b>, ${e(o.evlatCins)}.${o.bes?" "+e(o.bes)+".":""}`);
-  blok("para","Rızık",`${e(o.rizik)}. ${e(o.meslek)}.`);
-  blok("kismet","Bu devir",`${e(o.devir)}. Kısmet: <b>${e(o.kismet)}</b>.`);
-  blok("ugur","Uğurlu",`<b>${e(o.gun)}</b> günü. Renk: ${e(o.renk)}. Taş: ${e(o.tas)}.`);
-  card.appendChild(g);
+  top.appendChild(el("span","eb",`valide ${o.anne} · ebced ${o.ebced}`)); L.appendChild(top);
+  const pills=el("div","oz-pills"); [["İsim burcu",o.isimBurc.split(" (")[0],""],["Unsur",o.unsur,"u-"+o.unsur],["Yıldız",o.yildiz,""]].forEach(([k,v,cl])=>{ const d=el("div","oz-pill "+cl); d.appendChild(el("small",null,k)); d.appendChild(el("b",null,v)); pills.appendChild(d); }); L.appendChild(pills);
+  const sky=el("div","oz-sky"); [["Tâli'",o.tali||"bilinmiyor"],["Güneş",o.gunes],["Ay",o.ay],["Menzil",o.menzil]].forEach(([k,v])=>{ const d=el("div"); d.appendChild(el("small",null,k)); d.appendChild(el("b",null,v)); sky.appendChild(d); }); L.appendChild(sky);
+  const q=el("p","oz-quote",o.oz); q.appendChild(el("span",null,o.imtihan)); L.appendChild(q);
+  if(o.agirMuhur){ const m=el("div","oz-muhur"); m.appendChild(el("small",null,"Haritanın en ağır mührü")); m.appendChild(el("b",null,o.agirMuhur)); L.appendChild(m); }
   const es=el("div","oz-esma"); const l=el("div"); l.appendChild(el("small",null,"Okunacak esmâ")); l.appendChild(el("b",null,o.esma)); if(o.esmaMana) l.appendChild(el("small",null,o.esmaMana)); es.appendChild(l);
-  const n=el("div","n",String(o.esmaSay)); n.appendChild(el("small",null," kere")); es.appendChild(n); card.appendChild(es);
+  const n=el("div","n",String(o.esmaSay)); n.appendChild(el("small",null,"kere")); es.appendChild(n); L.appendChild(es);
+  const g=el("div","oz-grid");
+  const blok=(ic,h,html,cls)=>{ const b=el("div","oz-b"+(cls?" "+cls:"")); const hh=el("div","h"); hh.innerHTML=OZI[ic]; hh.appendChild(document.createTextNode(h)); b.appendChild(hh); const p=el("p"); p.innerHTML=html; b.appendChild(p); g.appendChild(b); };
+  blok("ask","Aşk ve nikâh",`${e(o.ask)} <b>Nikâh vakti ${e(o.evlilikYas)}.</b> <i>${e(o.nikahNot)}.</i>`,"w c-rose");
+  blok("es","Eşin",`${e(o.es.charAt(0).toLocaleUpperCase("tr")+o.es.slice(1))}. ${e(o.esHal)}`,"w");
+  blok("cocuk","Evlât",`<b>${e(o.evlat)}</b>, ${e(o.evlatCins)}.${o.bes?" "+e(o.bes)+".":""}`);
+  blok("is","Meslek",`${e(o.meslek)}.`);
+  blok("para","Rızık",`${e(o.rizik)}.`);
+  blok("kismet","Bu devir",`${e(o.devir)}. Kısmet: <b>${e(o.kismet)}</b>.`);
+  blok("donum","Dönüm yaşları",e(o.donum),"w c-amber");
+  blok("dikkat","Dikkat",e(o.dikkat));
+  blok("ugur","Uğurlu",`<b>${e(o.gun)}</b> günü. Renk: ${e(o.renk)}. Taş: ${e(o.tas)}. Maden: ${e(o.maden)}.`,"w");
+  Rr.appendChild(g);
+  card.appendChild(L); card.appendChild(Rr);
   card.appendChild(el("div","oz-foot","Ayrıntılar sonraki sekmelerde"));
   root.appendChild(card);
 }
@@ -671,6 +769,7 @@ function run(c){
   k.appendChild(key("Ay menzili",c.menzil));
   k.appendChild(key("Esmâ",`Yâ ${c.esmaAd[0].tr}`));
   $("saatNot").hidden=!c.inp.saatYok; k.hidden=true;
+  document.querySelector(".rhead").hidden=!c.inp.saatYok; document.querySelector(".rhead").classList.toggle("only-note",!!c.inp.saatYok);
   drawTabs(); $("intro").hidden=true; $("sonuc").hidden=false; layout.classList.add("has-result");
   showTab(0,false); setStatus("");
   requestAnimationFrame(()=>{ const top=$("sonuc").getBoundingClientRect().top+scrollY-12; window.scrollTo({top:Math.max(0,top),behavior:still()?"auto":"smooth"}); });
@@ -754,6 +853,7 @@ $("f").addEventListener("submit",ev=>{ ev.preventDefault();
   if(!trToArabic(inp.ad)||!trToArabic(inp.anne)){ setStatus("İsimler yalnızca harflerden oluşmalı.",true); $("ad").focus(); return; }
   let c; try{ c=compute(inp); }catch(e){ setStatus("Hesap yapılamadı. Tarih ve saati kontrol et.",true); return; }
   run(c); });
+$("yeniFal").addEventListener("click",()=>{ $("f").reset(); clearYer(); $("saat").disabled=false; $("sonuc").hidden=true; $("intro").hidden=false; layout.classList.remove("has-result"); window.scrollTo({top:0,behavior:still()?"auto":"smooth"}); setTimeout(()=>$("ad").focus({preventScroll:true}),350); });
 $("duzenle").addEventListener("click",()=>{ layout.classList.remove("has-result"); window.scrollTo({top:0,behavior:still()?"auto":"smooth"}); setTimeout(()=>$("ad").focus({preventScroll:true}),350); });
 })();
 </script>

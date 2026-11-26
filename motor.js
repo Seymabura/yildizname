@@ -57,6 +57,44 @@ function oku(c, ctx){
     return [`${K.SAHIP_HANEDE} ${PAD(sk)} ise ${BURC[g.bi][0]} burcunda, ${SIRA[g.hane]} hânededir; yani ${K.HANE[g.hane]} hânesine düşmüştür. Bu hânenin işleri o yoldan, ${K.HANE[g.hane]} kapısından gelir. ${PAD(sk)} ${K.HAL[g.hal]}.`];
   }
 
+  // ---- nazarlar (yıldızların birbirine bakışı) ----
+  const G = {}; gez.forEach(g=>G[g.k]=g);
+  const NZ = [["mukârene",0,8],["tesdîs",60,5],["terbî'",90,7],["teslîs",120,7],["mukâbele",180,8]];
+  const nazarlar = [];
+  for(let i=0;i<gez.length;i++) for(let j=i+1;j<gez.length;j++){
+    let d = Math.abs(gez[i].lon-gez[j].lon); if(d>180) d=360-d;
+    for(const [tur,aci,orb] of NZ){ const o=Math.abs(d-aci); if(o<=orb){ nazarlar.push({a:gez[i].k,b:gez[j].k,tur,orb:o}); break; } }
+  }
+  nazarlar.sort((x,y)=>x.orb-y.orb);
+  const nazar = (a,b) => nazarlar.find(n=>(n.a===a&&n.b===b)||(n.a===b&&n.b===a));
+  const sadNazar = n => n && (n.tur==="tesdîs"||n.tur==="teslîs");
+  const nahsNazar = n => n && (n.tur==="terbî'"||n.tur==="mukâbele"||(n.tur==="mukârene"&&(n.a==="Zuhal"||n.b==="Zuhal"||n.a==="Mirrih"||n.b==="Mirrih")));
+  const yer = k => G[k] && G[k].hane;
+  const zuhal7 = yer("Zuhal")===7;
+
+  // ---- hüküm terazisi: her hüküm, dayanaklarıyla birlikte tartılır ----
+  const terazi = () => { const t={puan:0,gerekce:[]}; t.ekle=(kosul,p,why)=>{ if(kosul){ t.puan+=p; t.gerekce.push(why); } return t; }; return t; };
+  const venus = G.Zuhre || {};
+  const yediSahipG = G[BURC[hane(7)][3]];
+  const T_gec = terazi()
+    .ekle(!saatYok && BURC[hane(7)][3]==="Zuhal", 2, "izdivaç hânesinin sâhibinin Zühal olması")
+    .ekle([c.hourRuler,c.dayRuler,c.isimYildiz].includes("Zuhal"), 1, "kaderinde Zühal'in eli bulunması")
+    .ekle(nahsNazar(nazar("Zuhal","Zuhre")), 1, "Zühal'in Zühre'ye kötü nazarla bakması")
+    .ekle(venus.hal==="vebâl"||venus.hal==="hubût", 1, "Zühre'nin zayıf düştüğü bir burçta olması")
+    .ekle(!!venus.raci, 1, "Zühre'nin râci' olması")
+    .ekle(!saatYok && yediSahipG && [6,8,12].includes(yediSahipG.hane), 1, "izdivaç hânesinin sâhibinin gizli bir hânede oturması")
+    .ekle(!saatYok && (yer("Zuhre")===7||yer("Musteri")===7), -1, "izdivaç hânesinde sa'd bir yıldız bulunması")
+    .ekle(venus.hal==="beyt"||venus.hal==="şeref", -1, "Zühre'nin kendi evinde yahut şerefinde olması, yani muhabbetin kuvvetli olması")
+    .ekle(sadNazar(nazar("Musteri","Zuhre")), -1, "Müşterî'nin Zühre'ye sa'd nazarla bakması")
+    .ekle(c.isimYildiz==="Zuhre"||c.hourRuler==="Zuhre", -1, "kaderinde Zühre'nin eli bulunması");
+  const T_huzur = terazi()
+    .ekle(nahsNazar(nazar("Mirrih","Zuhre")), -1, "Mirrîh ile Zühre'nin çekişmesi")
+    .ekle(nahsNazar(nazar("Zuhal","Zuhre")), -1, "Zühal ile Zühre'nin çekişmesi")
+    .ekle(sadNazar(nazar("Musteri","Zuhre")), 1, "Müşterî'nin muhabbet yıldızına sa'd bakışı")
+    .ekle(sadNazar(nazar("Zuhal","Zuhre")), 1, "Zühal'in Zühre'ye dostça bakması; sabırla olgunlaşan sevgi")
+    .ekle(sadNazar(nazar("Kamer","Zuhre")), 1, "Ay ile Zühre'nin sevgiyle bakışması");
+
+
   // harfler
   const harfAd = l => NAME[l.b];
   const ilk = c.nm.first ? harfAd(c.nm.first) : null;
@@ -154,6 +192,14 @@ function oku(c, ctx){
        const g=agir.sort((a,b)=>(b.k==="Zuhal")-(a.k==="Zuhal"))[0];
        return `Bu haritanın en ağır mührü şudur: ${PAD(g.k)} ${SIRA[g.hane]} hânede, yani ${K.HANE[g.hane]} hânesinde oturur. Kaderin en çok bu kapıda sınanır; sabır ve dua da en çok bu kapıya lâzımdır.`; })()
    )},
+   {h:"Yıldızların Nazarları", p:P(
+     `${giris()} yıldızlar yalnız oturdukları yere göre değil, birbirine nasıl baktıklarına göre de hüküm verir. Sa'd nazarlar tesdîs ve teslîs, nahs nazarlar terbî' ve mukâbeledir; mukârene ise iki yıldızın aynı yerde buluşmasıdır.`,
+     ...nazarlar.filter(n=>!(n.a==="Utarid"&&n.b==="Sems")&&!(n.a==="Sems"&&n.b==="Utarid")).slice(0,6).map(n=>{
+       const key=[n.a,n.b].sort().join("|"), cf=K.CIFT[key];
+       const ozel = cf ? (sadNazar(n)?cf[0]:nahsNazar(n)?cf[1]:cf[2]) : (sadNazar(n)?`${K.YILDIZ_KEY[n.a]} ile ${K.YILDIZ_KEY[n.b]} birbirine yardım eder.`:nahsNazar(n)?`${K.YILDIZ_KEY[n.a]} ile ${K.YILDIZ_KEY[n.b]} arasında bir çekişme vardır; biri öbürünü sıkıştırır.`:`${K.YILDIZ_KEY[n.a]} ile ${K.YILDIZ_KEY[n.b]} birbirine karışır ve tek bir kuvvet gibi işler.`);
+       return `${PAD(n.a)} ile ${PAD(n.b)} ${K.NAZAR_TUR[n.tur]}${n.orb<2?", hem de pek yakın dereceden":""}. ${ozel.charAt(0).toLocaleUpperCase("tr")+ozel.slice(1)}`; }),
+     nazarlar.length ? "" : "Yıldızların arasında kuvvetli bir nazar yoktur; her biri kendi hânesinde, kendi bildiğince hüküm verir."
+   )},
    !saatYok && {h:"Bu Devrin Hükmü", p:P(
      `Kadîm müneccimler doğuş haritasına bakıp yalnız ömrün tamamını değil, bulunulan devri de okurlardı. Bugün gökte Zühal ${BURC[c.gecis[0].bi][0]}, Müşterî ise ${BURC[c.gecis[1].bi][0]} burcundadır.`,
      K.GECIS_ZUHAL[c.gecis[0].hane],
@@ -187,25 +233,32 @@ function oku(c, ctx){
    {h:"Ruhsal Yükü ve Kader İzi", p:P(
      `Kader izin, Güneş'in burcu ile isminin burcu arasında çizilir. Güneş'in ${c.sunSign[2].toLocaleLowerCase("tr")}, isminin ise ${c.isimBurc[2].toLocaleLowerCase("tr")} tabiatlı bir burçtadır; bunlar ${GECIS[c.sunSign[2]][c.isimBurc[2]]} iki tabiattır. ${c.sunSign[2]===c.isimBurc[2] ? "Doğuşunla ismin aynı yöne çeker; kaderin dosdoğru bir yoldur, ama o yolda tek renk kalmak da senin darlığın olabilir." : K.UNSUR[c.sunSign[2]].karsit===c.isimBurc[2] ? "Doğuşunla ismin seni iki zıt yöne çeker; ömrün bu iki tabiatı barıştırmakla geçer ve barıştırdığın gün kaderin açılır." : "Doğuşunla ismin birbirine yardım eder; birinin eksiğini öteki tamamlar."}`,
      `${giris()} ${isimY.ad} yıldızının izini taşıyanın ruhsal yükü şudur: ${isimY.imtihan.split(": ")[1]||isimY.imtihan}`
+   )},
+   {h:"Tâli' Sâhibi ve Ay'ın Hâli", p:P(
+     !saatYok && (()=>{ const sk=BURC[ascI][3], g=G[sk]; return `Tâli'in ${c.ascSign[0]} olduğundan ömrünün sâhibi ${PAD(sk)} yıldızıdır. ${PAD(sk)} doğduğun ânda ${BURC[g.bi][0]} burcunda, ${SIRA[g.hane]} hânede, yani ${K.HANE[g.hane]} hânesindeydi ve ${K.HAL[g.hal]}. ${K.TALI_SAHIP[g.hane]}`; })(),
+     G.Kamer && `Ay ise ${BURC[G.Kamer.bi][0]} burcunda${saatYok?"":`, ${SIRA[G.Kamer.hane]} hânede`}dir; ${saatYok?"gönlün bu burcun tabiatını taşır":K.AY_HANE[G.Kamer.hane]}. ${G.Kamer.hal==="şeref"?"Ay şerefinde olduğundan hislerin berrak ve bereketlidir.":G.Kamer.hal==="beyt"?"Ay kendi evinde olduğundan gönlün kendi sesini iyi duyar.":G.Kamer.hal==="hubût"?"Ay düşüşünde olduğundan hislerin derin ama yaralıdır; kendini korumak için kabuk bağlarsın.":G.Kamer.hal==="vebâl"?"Ay vebâlde olduğundan hislerini sert bir kabuğun altında saklarsın.":""}`
    )}
   ].filter(Boolean)});
 
   /* ============ III. Evlilik ve Aşk ============ */
   const yedi = KB(yedinciI), yediEl = BURC[yedinciI][2], yediSahipY = Y(yedinciSahip);
   let ask = 1 + (varMi("Zuhre")?1:0) + (["Cevzâ","Sünbüle","Kavs","Hût"].includes(c.moonSign[0])||["Cevzâ","Sünbüle","Kavs","Hût"].includes(BURC[yedinciI][0])?1:0) + ((top==="Ateş"||top==="Hava")?1:0) - (top==="Toprak"?1:0);
-  ask = Math.max(1, Math.min(3, ask));
+  if(!saatYok && (zuhal7 || yer("Zuhal")===5)) ask -= 1;
+  const askTavan = zuhal7 ? 2 : 3;
+  if(!saatYok && (yer("Zuhre")===5 || yer("Zuhre")===7) && venus.hal!=="vebâl") ask += 1;
+  ask = Math.max(1, Math.min(askTavan, ask));
   const ruhPuan = (menzil[0]==="s"?1:0) + (K.UNSUR[top].tamamlayan===yediEl||top===yediEl?1:0) + (SAD[yedinciSahip]>0?1:0) + (varMi("Zuhre")||varMi("Musteri")?1:0);
   let huzur = SAD[yedinciSahip] + (K.UNSUR[top].karsit===yediEl?-1:K.UNSUR[top].tamamlayan===yediEl||top===yediEl?1:0) + (menzil[0]==="s"?1:menzil[0]==="n"?-1:0) + (varMi("Mirrih")?-1:0);
-  huzur += sadHane(7);
+  huzur += sadHane(7) + T_huzur.puan;
   const huzurD = huzur<=-1?0:huzur<=1?1:2;
   const esElem = K.UNSUR[top].tamamlayan;
   const esHarfler = (()=>{ const pool=[...new Set([...ES_HARF[esElem], ...ES_HARF[yediEl]])]; const out=[]; while(out.length<3&&pool.length) out.push(pool.splice(Math.floor(R()*pool.length),1)[0]); return out; })();
   const ayrilikSebep = {Mirrih:"ani bir öfke, sert sözler ve inatlaşma",Zuhal:"soğukluk, uzun suskunluklar, maddi darlık yahut aile büyüklerinin baskısı",Utarid:"söz taşıyanlar, yanlış anlaşılmalar ve dedikodu",Kamer:"hislerin gelgiti ve ailelerin evliliğe karışması",Zuhre:"kıskançlık ve gözün başka güzelliklere kayması",Sems:"gurur ve kimin haklı olduğu kavgası",Musteri:"ölçüsüz harcama yahut inanç ve hayat görüşü farkı"}[yedinciSahip];
-  let ilkYas = {Ateş:[19,23],Hava:[21,25],Su:[22,26],Toprak:[24,28]}[top].slice();
-  const zuhalGec = varMi("Zuhal") || yedinciSahip==="Zuhal";
-  if(zuhalGec){ ilkYas=[ilkYas[0]+4, ilkYas[1]+5]; }
-  if(hanede(7).some(g=>g.k==="Zuhal")){ ilkYas=[ilkYas[0]+3, ilkYas[1]+3]; }
-  if(varMi("Zuhre")) { ilkYas=[ilkYas[0]-1, ilkYas[1]-1]; }
+  let ilkYas = zuhal7 ? [27,31] : {Ateş:[20,24],Hava:[21,25],Su:[22,26],Toprak:[24,28]}[top].slice();
+  const kay = Math.max(-2, Math.min(4, T_gec.puan));
+  ilkYas = [ilkYas[0]+kay, ilkYas[1]+kay];
+  const zuhalGec = zuhal7 || T_gec.puan>=2;
+  const gecGerekce = (zuhal7?["Zühal'in izdivaç hânesinde oturması"]:[]).concat(T_gec.gerekce);
   S.push({id:"evlilik", title:"Evlilik ve Aşk", subs:[
    {h:"Evlilik Tâli'i", p:P(
      `Tâli'den yedinci hane izdivaç hanesidir. Senin yedinci hanen ${BURC[yedinciI][0]} (${BURC[yedinciI][1]}) burcuna, sahibi de ${yediSahipY.ad} yıldızına düşer. ${yediSahipY.ad} ${yediSahipY.sad} sayıldığından ${SAD[yedinciSahip]>0?"izdivaç hanen hayırlı bir yıldızın elindedir":SAD[yedinciSahip]<0?"izdivaç hanen ağır bir yıldızın elindedir; evlilik sana sabrı öğretecek bir mektep olur":"izdivaç hanen ne sa'd ne nahs bir yıldızın elindedir; evliliğin hâli senin ve eşinin elindedir"}.`,
@@ -213,7 +266,9 @@ function oku(c, ctx){
    )},
    {h:"Kaç Büyük Aşk Yaşayacağı", p:P(
      ask===1 ? "Yıldızların tek bir büyük aşka işaret eder. Gönlün kolay açılmaz; ama açıldığında bir daha kapanmaz. Hayatında hevesler olabilir, ama 'aşk' diyebileceğin, ruhunu sarsan sevda bir kere gelir." : ask===2 ? "Yıldızların iki büyük aşka işaret eder. Birincisi gençliğinde gelir ve sana sevmeyi öğretir; ikincisi ise kalbinin olgunlaştığı yaşta gelir ve sana kalmayı öğretir. Çoğu kez birinci aşk bir ayrılıkla, ikincisi bir yuva ile mühürlenir." : "Yıldızların üç büyük aşka işaret eder. Gönlün hareketli bir gönüldür. Biri ateş gibi yakar, biri su gibi serinletir, biri de toprak gibi kök saldırır. Kitaplarda böyle tâli' ehline 'muhabbet ehli' denir; ama çok sevmek çok yorulmak demektir.",
-     `${({Ateş:"Ateş harfleri",Hava:"Hava harfleri",Su:"Su harfleri",Toprak:"Toprak harfleri"})[top]} galip olduğundan aşkın ${({Ateş:"çabuk tutuşan ama sönmemek için hep yeni odun isteyen",Hava:"söz ve fikirle başlayan, dostluk gibi büyüyen",Su:"derin, sessiz ve kolay unutulmayan",Toprak:"yavaş kurulan ama kolay yıkılmayan"})[top]} bir aşktır.`
+     `${({Ateş:"Ateş harfleri",Hava:"Hava harfleri",Su:"Su harfleri",Toprak:"Toprak harfleri"})[top]} galip olduğundan aşkın ${({Ateş:"çabuk tutuşan ama sönmemek için hep yeni odun isteyen",Hava:"söz ve fikirle başlayan, dostluk gibi büyüyen",Su:"derin, sessiz ve kolay unutulmayan",Toprak:"yavaş kurulan ama kolay yıkılmayan"})[top]} bir aşktır.`,
+     ask>=2 && zuhalGec ? "Aşkların nikâhından önce gelir. Kadîm hükme göre izdivaç hânesinde Zühal olan kimse gönlünü erken açar, ama mührünü geç vurur: ilk sevdalar seni olgunlaştırır, kalıcı bağ ise Zühal'in devri dolduktan sonra kurulur." : "",
+     (venus.hal==="beyt"||venus.hal==="şeref") ? `Zühre doğduğun ânda ${venus.hal==="beyt"?"kendi evinde":"şerefinde"}dir; bu, gönlünün sevgiye kapalı olmadığını, muhabbetin sende kuvvetli bir cevher olduğunu gösterir.` : venus.hal==="vebâl"||venus.hal==="hubût" ? "Zühre doğduğun ânda zayıf bir burçtadır; sevgiyi göstermekte ve kabul etmekte zorlanırsın, ama bu zorluk seni seçici ve sadık kılar." : ""
    )},
    {h:"Ruh Eşi ve Kadersel Eş İhtimali", p:P(
      ruhPuan>=3 ? "Kadersel eş ihtimali kavîdir. Yıldızlar kaderinde önceden yazılmış bir karşılaşmaya işaret eder; o kimseyi gördüğünde onu daha önceden tanıyormuş gibi hissedersin." : ruhPuan>=2 ? "Kadersel eş ihtimali vardır, ama yolu doğrudan değildir. Ruh eşin, önce başka bir kapıdan geçip olgunlaştıktan sonra karşına çıkar." : "Yıldızların kadersel eşten çok, emekle kurulan bir bağa işaret eder. Senin için ruh eşi bulunan değil, birlikte inşa edilen bir şeydir; zamanla ruhun ona kenetlenir.",
@@ -238,7 +293,7 @@ function oku(c, ctx){
      `Eğer bir ayrılık kapıyı çalarsa, sebebi ${ayrilikSebep} olur; çünkü izdivaç hanenin sahibi ${yediSahipY.ad} yıldızıdır. Bu kapıyı kapalı tutan şey, ${({Mirrih:"öfke anında susmak",Zuhal:"sevgiyi sözle de göstermek",Utarid:"araya söz sokanları evden uzak tutmak",Kamer:"evliliğin sırrını ailelere taşımamak",Zuhre:"gönlü bir ahitle bağlamak",Sems:"haklı olmaktansa mutlu olmayı seçmek",Musteri:"hesabı ve ölçüyü birlikte tutmak"})[yedinciSahip]} olur.`
    )},
    {h:"Evlilik Zamanına Dair Dönem Yorumları", p:P(
-     `Zühre devri, yani sevginin yaşı, kadîm kitaplarda on dört ile yirmi iki arası sayılır; Şems devri ise yirmi iki ile kırk bir arasıdır. Senin harflerinin tabiatına göre evliliğe en açık ilk dönem ${ilkYas[0]} ile ${ilkYas[1]} yaşları arasıdır.`,
+     `Zühre devri, yani sevginin yaşı, kadîm kitaplarda on dört ile yirmi iki arası sayılır; Şems devri ise yirmi iki ile kırk bir arasıdır. Senin için nikâha en açık dönem ${ilkYas[0]} ile ${ilkYas[1]} yaşları arasıdır.${gecGerekce.length?` Bu hükmün dayanakları şunlardır: ${gecGerekce.join("; ")}. Hepsi tartıldığında ${T_gec.puan+(zuhal7?3:0)>0?"bunlar nikâhı geciktirir":T_gec.puan+(zuhal7?3:0)<0?"bunlar nikâhı öne çeker":"bunlar birbirini dengeler"}.`:` Harflerinin tabiatı bu yaşları gösterir; yıldızlardan buna engel yahut acele işareti yoktur.`}`,
      zuhalGec ? "Kaderinde Zühal'in eli olduğundan evlilik gecikebilir. Zühal'in devri yirmi dokuz ile otuz yaşları arasında tamamlanır; bu yaşlar senin için bir dönüm noktasıdır ve çoğu kez kalıcı bir bağ bu devrin ardından kurulur." : `Bu dönem geçerse, Müşterî'nin on iki yıllık devri yirmi dört ve otuz altı yaşlarını da hayırlı kılar.`,
      `Evlilik için en uğurlu gün Cuma, en uğurlu saat Zühre saatidir. ${isimY.gun} günü de senin isminin yıldızının günü olduğundan hayırlı sayılır.`
    )},
@@ -247,15 +302,21 @@ function oku(c, ctx){
 
   /* ============ IV. Çocuk ve Yuva ============ */
   const bes = KB(besinciI);
-  let evlat = bes.verim + 1 + (varMi("Musteri")?1:0) + (top==="Su"?1:0) - (varMi("Zuhal")?1:0) - (top==="Ateş"&&bes.verim===0?1:0);
-  evlat += sadHane(5);
+  const T_evlat = terazi()
+    .ekle(varMi("Musteri"), 1, "Müşterî'nin kaderinde eli bulunması")
+    .ekle(top==="Su", 1, "harflerinde su unsurunun galip olması")
+    .ekle(!saatYok && hanede(5).some(g=>SAD[g.k]>0), 1, `beşinci hânede ${hanede(5).filter(g=>SAD[g.k]>0).map(g=>PAD(g.k)).join(" ve ")} bulunması`)
+    .ekle(!saatYok && hanede(5).some(g=>SAD[g.k]<0), -1, `beşinci hânede ${hanede(5).filter(g=>SAD[g.k]<0).map(g=>PAD(g.k)).join(" ve ")} bulunması`)
+    .ekle(varMi("Zuhal"), -1, "kaderinde Zühal'in eli bulunması")
+    .ekle(top==="Ateş"&&bes.verim===0, -1, "ateş harflerinin kısır bir burçla birleşmesi");
+  let evlat = bes.verim + 1 + Math.max(-1, Math.min(1, T_evlat.puan));
   evlat = Math.max(1, Math.min(5, evlat));
   const evlatStr = ["","bir yahut iki","iki","iki yahut üç","üç","üç yahut dört"][evlat];
   let erkek = (bes.cins==="erkek"?1:-1) + ERKEK_YILDIZ[c.hourRuler] + ((top==="Ateş"||top==="Hava")?1:-1) + ERKEK_YILDIZ[c.isimYildiz];
   S.push({id:"cocuk", title:"Çocuk ve Yuva", subs:[
    {h:"Muhtemel Evlât Sayısı", p:P(
      `Tâli'den beşinci hane evlât hanesidir. Senin beşinci hanen ${BURC[besinciI][0]} (${BURC[besinciI][1]}) burcuna düşer. ${bes.evlat}`,
-     `Bu hane, isminin yıldızı ve harflerinin tabiatı birlikte tartıldığında evlât sayısının ${evlatStr} olması ihtimali kavîdir. ${varMi("Musteri")?"Müşterî'nin kaderindeki eli evlât kısmetini genişletir. ":""}${varMi("Zuhal")?"Zühal'in kaderindeki eli evlâdı geciktirebilir; ama geç gelen evlât hayırlı olur. ":""}`
+     `Bu hane, isminin yıldızı ve harflerinin tabiatı birlikte tartıldığında evlât sayısının ${evlatStr} olması ihtimali kavîdir.${T_evlat.gerekce.length?` Bu hükümde tartılanlar şunlardır: ${T_evlat.gerekce.join("; ")}.`:""}${zuhalGec?" Nikâhın geç olacağından evlâtlar da birbirine yakın yaşlarda gelir.":""}`
    )},
    {h:"Erkek ve Dişi Tabiatın Ağırlığı", p:P(
      erkek>=2 ? "Yıldızlarında erkek tabiat ağır basar. Kitaplarda bu hâl, ilk evlâdın yahut evlâtlarının çoğunun erkek tabiatlı olacağına delâlet eder." : erkek<=-2 ? "Yıldızlarında dişi tabiat ağır basar. Kitaplarda bu hâl, ilk evlâdın yahut evlâtlarının çoğunun kız tabiatlı olacağına delâlet eder." : "Yıldızlarında erkek ve dişi tabiat birbirine yakındır. Evlâtların arasında hem kız hem erkek bulunması ihtimali kavîdir.",
@@ -330,16 +391,28 @@ function oku(c, ctx){
     isimBurc: `${c.isimBurc[0]} (${c.isimBurc[1]})`, unsur: top, yildiz: isimY.ad,
     oz: `${disi ? disi+", için" : "İçin"} ${c.moonSign[1]} gibi ${SIFAT[c.moonSign[0]]}. ${UNSUR_OZ[top]}`,
     imtihan: `Ana imtihanın ${IMT[c.isimYildiz]}.`,
-    ask: `${["","Tek","İki","Üç"][ask]} büyük aşk. Ruh eşi ihtimali ${ruhPuan>=3?"kavî":ruhPuan>=2?"orta":"zayıf"}. Evlilik ${["çetin","orta hâlli","huzurlu"][huzurD]} geçer.`,
+    ask: `${["","Tek","İki","Üç"][ask]} büyük aşk. Ruh eşi ihtimali ${ruhPuan>=3?"kavî":ruhPuan>=2?"orta":"zayıf"}. Yuva ${["çetin","orta hâlli","huzurlu"][huzurD]} olur.`,
     evlilikYas: `${ilkYas[0]}–${ilkYas[1]} yaş arası`,
     yedi: yedi7.length ? `Yedinci hânede ${yedi7.map(g=>PAD(g.k)).join(" ve ")}` : `Eşini ${Y(yedinciSahip).ad} gösterir`,
     evlat: `${evlatStr.charAt(0).toLocaleUpperCase("tr")+evlatStr.slice(1)} evlât`, evlatCins: erkek>=2?"erkek tabiat ağır":erkek<=-2?"dişi tabiat ağır":"erkek ve dişi denk",
     bes: bes5.length ? `Beşinci hânede ${bes5.map(g=>PAD(g.k)).join(" ve ")}` : "",
-    rizik: `Rızkın ${K.UNSUR[top].yon} tarafından gelir`, meslek: saatYok ? isimY.meslek.split(/[.;]/)[0] : (hanede(10)[0] ? `Mevki hânende ${hanede(10).map(g=>PAD(g.k)).join(" ve ")}; ${({Zuhal:"geç ama sağlam yükseliş",Musteri:"itibar ve devlet kapısı",Mirrih:"rekabetle yükseliş",Sems:"baş olmak",Zuhre:"sanat ve zarafetle mevki",Utarid:"kalem ve ticaret",Kamer:"halkla iç içe iş"})[hanede(10)[0].k]}` : `Mevki hânen ${BURC[onuncuI][0]}`),
+    rizik: `Rızkın ${K.UNSUR[top].yon} tarafından gelir${saatYok?"":hanede(2).length?`; mal hânende ${hanede(2).map(g=>PAD(g.k)).join(" ve ")}, ${({Zuhal:"emekle ve geç biriken mal",Musteri:"bereketli ve hayırlı kazanç",Mirrih:"çabuk gelen, çabuk giden para",Sems:"büyüklerden ve itibardan gelen mal",Zuhre:"güzel işlerden gelen rızık",Utarid:"ticaretten ve kalemden kazanç",Kamer:"artıp eksilen mal"})[hanede(2)[0].k]}`:`; mal hânen ${BURC[ikinciI][0]}`}`, meslek: saatYok ? isimY.meslek.split(/[.;]/)[0] : (hanede(10)[0] ? `Mevki hânende ${hanede(10).map(g=>PAD(g.k)).join(" ve ")}; ${({Zuhal:"geç ama sağlam yükseliş",Musteri:"itibar ve devlet kapısı",Mirrih:"rekabetle yükseliş",Sems:"baş olmak",Zuhre:"sanat ve zarafetle mevki",Utarid:"kalem ve ticaret",Kamer:"halkla iç içe iş"})[hanede(10)[0].k]}` : `Mevki hânen ${BURC[onuncuI][0]}`),
     gun: isimY.gun, renk: isimY.renk, tas: isimY.tas, maden: isimY.maden,
     esma: `Yâ ${enMunasip.tr}`, esmaSay: enMunasip.v, esmaMana: K.ESMA[enMunasip.tr]||"",
     devir: saatYok ? `Sıradaki Müşterî yılı ${sonrakiMusteri} yaş` : `Müşterî bugün ${SIRA[c.gecis[1].hane]}, Zühal ${SIRA[c.gecis[0].hane]} hânende`,
-    kismet: ["Kapalı, sabırla açılır","Orta, emekle açılır","Açık","Çok açık"][kismetDerece]
+    kismet: ["Kapalı, sabırla açılır","Orta, emekle açılır","Açık","Çok açık"][kismetDerece],
+    ruhEs: ruhPuan>=3?"kavî":ruhPuan>=2?"orta":"zayıf",
+    huzur: ["çetin","orta hâlli","huzurlu"][huzurD],
+    askSay: ask,
+    nikahNot: zuhal7 ? "Yedinci hânede Zühal: aşk erken, nikâh geç ama sağlam" : T_gec.puan>=2 ? "Zühal'in eli nikâhı biraz geciktirir" : T_gec.puan<=-1 ? "Zühre'nin kuvveti nikâhı kolaylaştırır" : "Nikâhın önünde büyük bir engel yok",
+    es: `${esElem.toLocaleLowerCase("tr")} tabiatlı; isminde ${esHarfler.map(h=>TR_KARSILIK[h].split(/[ ,]/)[0]).join(", ")} harfleri ağır basar`,
+    esHal: (yedi.es||"").split(/(?<=[.;])\s/)[0],
+    gok: saatYok ? `Güneş ${c.sunSign[1]}, Ay ${c.moonSign[1]}` : `Tâli' ${c.ascSign[1]}, Güneş ${c.sunSign[1]}, Ay ${c.moonSign[1]}`,
+    tali: saatYok ? null : c.ascSign[1], gunes: c.sunSign[1], ay: c.moonSign[1], menzil: c.menzil,
+    donum: [sonrakiMusteri, sonrakiZuhal].sort((x,y)=>x-y).map(x=>x===sonrakiZuhal?`${x} (Zühal devri, hesaplaşma)`:`${x} (Müşterî yılı, bolluk)`).join(" · "),
+    dikkat: ({Ateş:"Cesaretsizlik ve bekleyip durmak kısmetini bağlar.",Hava:"Derdini söyleyememek ve yardım istememek kısmetini bağlar.",Su:"Katılık ve merhametsizlik kısmetini bağlar.",Toprak:"Dağınıklık ve sabırsızlık kısmetini bağlar."})[zayif],
+    maden: isimY.maden,
+    agirMuhur: (()=>{ const ag=gez.filter(g=>g.hane&&[1,4,7,10].includes(g.hane)&&(g.k==="Zuhal"||g.k==="Mirrih"||g.hal==="vebâl"||g.hal==="hubût")).sort((a,b)=>(b.k==="Zuhal")-(a.k==="Zuhal"))[0]; return ag?`${PAD(ag.k)} ${SIRA[ag.hane]} hânede (${K.HANE[ag.hane].split(",")[0]})`:""; })()
   };
 
   return S;

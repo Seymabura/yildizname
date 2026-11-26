@@ -99,3 +99,54 @@ K.GECIS_MUSTERI = ["",
  "Müşterî şu günlerde dostlar hânenden geçmektedir. Hayırlı dostlar gelir, ümitlerin gerçekleşmeye yaklaşır.",
  "Müşterî şu günlerde gizli sıkıntılar hânenden geçmektedir. Görünmeyen bir el seni korur; dua ve gizli sadaka bu devirde çok tesirlidir."];
 })(window.KITAP);
+(function(K){
+"use strict";
+// Tâli' sâhibinin oturduğu hâne: ömrün ve gönlün meşgul olduğu iş
+K.TALI_SAHIP = ["",
+ "Ömrün kendi elindedir; kaderini başkası çizmez, kendi iraden ve kendi çehrenle yol alırsın. İnsanlar seni ilk görüşte tanır.",
+ "Ömrünün dümeni mal ve kazanç tarafına dönüktür; emeğinin karşılığını görmek, el altında bir birikim tutmak sana huzur verir.",
+ "Ömrün söz, kalem ve yakınların arasında geçer; kardeşler, komşular ve kısa yolculuklar kaderinde büyük yer tutar.",
+ "Ömrün yuvaya ve köklerine bağlıdır; ev, ana baba ve ata yurdu senin kalenindir. Hayatın sonu başından daha huzurlu olur.",
+ "Ömrün gönül işleriyle, evlâtla ve sürûrla meşguldür; sevmek ve sevilmek senin için ekmek su gibidir.",
+ "Ömrün hizmet ve emekle geçer; başkalarının işini görmek, düzen kurmak ve şifa dağıtmak senin kaderindir. Bedenine iyi bakmak lâzımdır.",
+ "Ömrün izdivaç ve ortaklık üzerinden şekillenir; hayatının en büyük dönüşleri bir başkasıyla kurduğun bağ ile gelir.",
+ "Ömrün gizli işler, derin sırlar ve büyük dönüşümlerle örülüdür; yıkılıp yeniden kurulmayı bilirsin, başkasının malından ve mirastan da payın vardır.",
+ "Ömrün ilim, inanç ve uzak yollara dönüktür; gurbet, tahsil ve hakikati arama kaderinin ana yoludur.",
+ "Ömrün mevki ve sanat peşindedir; adını bir işle anmak, itibar kazanmak ve göz önünde durmak kaderinde yazılıdır.",
+ "Ömrün dostlar ve ümitler arasında geçer; kalabalıkların içinde kıymet bulur, hayırlı dostların eliyle yükselirsin.",
+ "Ömrünün bir kısmı perde arkasında geçer; yalnızlık, tefekkür ve gizli hizmet sana nasip olur. Görünmeyen bir himaye de seninledir."];
+// Ay'ın oturduğu hâne: gönlün huzur aradığı yer
+K.AY_HANE = ["",
+ "gönlün yüzüne vurur; hâlin her an çehrenden okunur",
+ "gönlün emniyeti el altındaki malda ve düzende arar",
+ "gönlün söyleşmekte, yazmakta ve yakınlarıyla dertleşmekte huzur bulur",
+ "gönlün evine, anasına ve köklerine sıkı sıkıya bağlıdır",
+ "gönlün sevmekte, eğlencede ve çocuklarda açılır",
+ "gönlün işe ve hizmete gömülerek huzur arar; bazen kendini unutur",
+ "gönlün bir eşte, bir yoldaşta karar kılar; yalnız kalmaya dayanamaz",
+ "gönlün derin, sırlı ve kıskançtır; kolay açılmaz, açılınca da tamamen açılır",
+ "gönlün uzaklara, ilme ve inanca kanat çırpar",
+ "gönlün herkesin önünde durur; halk seni hislerinle tanır",
+ "gönlün dost meclislerinde ve ümitlerinde huzur bulur",
+ "gönlün perde arkasında yaşar; rüyaları ve yalnızlığı kuvvetlidir"];
+// Nazarlar
+K.NAZAR_TUR = {
+ "mukârene":"aynı yerde buluşur, yani mukârenededir",
+ "tesdîs":"altıda bir nazarla, yani tesdîs ile dostça bakışır",
+ "terbî'":"dörtte bir nazarla, yani terbî' ile çekişerek bakışır",
+ "teslîs":"üçte bir nazarla, yani teslîs ile sevgiyle bakışır",
+ "mukâbele":"karşı karşıya, yani mukâbele hâlinde durur"};
+K.YILDIZ_KEY = {Sems:"izzet ve irade",Kamer:"gönül ve his",Utarid:"akıl ve söz",Zuhre:"muhabbet ve zevk",Mirrih:"cesaret ve öfke",Musteri:"bereket ve inanç",Zuhal:"sabır ve yük"};
+// Önemli çiftler: [iyi bakış, kötü bakış, buluşma]
+K.CIFT = {
+ "Zuhal|Zuhre":["Muhabbetin sabırla olgunlaşır; sevgin geç gelir ama kalıcı olur.","Muhabbetine bir soğukluk düşer; sevdiğinden uzak kalma, yaşça büyük yahut ağır bir sevgi imtihanı vardır.","Aşkın ağırbaşlı ve ciddidir; sevgiyi hafife almazsın, ama sevinçle de kolay göstermezsin."],
+ "Mirrih|Zuhre":["Aşkın tutkulu ve canlıdır; gönlün çabuk tutuşur, tutuştuğu yeri de ısıtır.","Aşkta kıskançlık ve fırtına vardır; tutku ile kavga aynı kapıdan girer.","Muhabbet ile ateş bir aradadır; sevdiğin kimse için her şeyi göze alırsın."],
+ "Kamer|Zuhal":["Hislerin sağlam ve sadıktır; gönlün zor açılır ama açılınca dayanıklıdır.","Gönlünde eski bir hüzün, ana tarafından gelen bir ağırlık vardır; kendini sevilmeye lâyık görmekte zorlanırsın.","Hislerini saklarsın; yaşından büyük bir gönül taşırsın."],
+ "Sems|Zuhal":["Babadan yahut büyüklerden gelen bir disiplin seni sağlamlaştırır.","Baba tarafıyla yahut otoriteyle bir imtihan vardır; kendini ispat etmek için çok çalışırsın.","İradene erken yaşta bir yük biner; olgunluğun erken gelir."],
+ "Musteri|Zuhre":["Muhabbetin bereketli ve hayırlıdır; sevdiğin kimse sana rızık getirir.","Sevgide ölçüyü kaçırma meyli vardır; çok verip az almak seni yorar.","Gönlün cömert ve neşelidir; sevgin bolluk getirir."],
+ "Kamer|Mirrih":["Hislerin cesurdur; sevdiklerini korumak için öne atılırsın.","Hislerin çabuk alevlenir; öfken içten gelir ve çabuk yayılır.","Gönlünde bir ateş yanar; hassasiyetin öfkeye kolay döner."],
+ "Kamer|Sems":["İçin ile dışın barışıktır; ne istediğini bilirsin.","İçin ile dışın ayrı yönlere çeker; istediğin ile yaptığın arasında bir çekişme vardır.","Doğduğun gece ay karanlığına yakındır; yeni başlangıçların sahibisin."],
+ "Utarid|Zuhal":["Aklın derin ve sabırlıdır; söylediğini tartarak söylersin.","Sözünü söylemekte zorlanır, kendini yanlış anlaşılmış hissedersin.","Fikrin ağırbaşlıdır; şakadan çok ciddiyete yatkınsın."],
+ "Musteri|Zuhal":["Sabır ile bereket el ele verir; geç gelen kısmet kalıcı olur.","Bolluk ile darlık arasında gidip gelirsin; ümit ile korku birbirini kovalar.","Hayatında büyük bir devrin kapısı açılır; sabır bereketi doğurur."]
+};
+})(window.KITAP);
