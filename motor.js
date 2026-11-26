@@ -22,7 +22,12 @@ const kok = n => { n=Math.abs(n); return n===0?9:1+((n-1)%9); };
 
 function oku(c, ctx){
   const {BURC, NAME, PLANET_AD, esmaVal} = ctx;
-  const R = rng(hash([c.inp.ad,c.inp.anne,c.inp.tarih,c.inp.saat,c.inp.yer].join("|").toLocaleLowerCase("tr")));
+  // İki zar: Rh hükümler için sabittir (aynı kişiye aynı hüküm), R anlatım için her bakışta değişir.
+  const Rh = rng(hash([c.inp.ad,c.inp.anne,c.inp.tarih,c.inp.saat,c.inp.yer].join("|").toLocaleLowerCase("tr")));
+  const tohum = ctx.tohum!=null ? ctx.tohum : ((Math.random()*4294967296)>>>0);
+  const R = rng(tohum);
+  // Yoruma dayalı hükümler haritanın izin verdiği aralıkta oynayabilir; çoğu bakışta aynı kalır.
+  const oyna = (v, lo, hi, p=0.2) => { const r=R(); return Math.max(lo, Math.min(hi, v + (r<p?-1:r>1-p?1:0))); };
   const pick = arr => arr[Math.floor(R()*arr.length)];
   const giris = (()=>{ const pool=K.GIRIS.slice(); return ()=>{ if(!pool.length) pool.push(...K.GIRIS); return pool.splice(Math.floor(R()*pool.length),1)[0]; }; })();
   const bIdx = b => BURC.findIndex(x=>x[0]===b[0]);
@@ -114,7 +119,7 @@ function oku(c, ctx){
 
   // kısmet puanı
   let puan = SAD[c.dayRuler] + SAD[c.hourRuler] + SAD[c.isimYildiz] + (menzil[0]==="s"?1:menzil[0]==="n"?-1:0) + (dolunayYonu?1:0) + SAD[BURC[isimI][3]];
-  const kismetDerece = puan<=-1?0:puan<=1?1:puan<=3?2:3;
+  const kismetDerece = oyna(puan<=-1?0:puan<=1?1:puan<=3?2:3, 0, 3, 0.15);
 
   const S = []; // bölümler
   const P = (...a) => a.filter(Boolean);
@@ -194,7 +199,7 @@ function oku(c, ctx){
    )},
    {h:"Yıldızların Nazarları", p:P(
      `${giris()} yıldızlar yalnız oturdukları yere göre değil, birbirine nasıl baktıklarına göre de hüküm verir. Sa'd nazarlar tesdîs ve teslîs, nahs nazarlar terbî' ve mukâbeledir; mukârene ise iki yıldızın aynı yerde buluşmasıdır.`,
-     ...nazarlar.filter(n=>!(n.a==="Utarid"&&n.b==="Sems")&&!(n.a==="Sems"&&n.b==="Utarid")).slice(0,6).map(n=>{
+     ...(()=>{ const ad=nazarlar.filter(n=>!(n.a==="Utarid"&&n.b==="Sems")&&!(n.a==="Sems"&&n.b==="Utarid")).slice(0,8); const ilk=ad.slice(0,2), kalan=ad.slice(2).map(x=>[R(),x]).sort((a,b)=>a[0]-b[0]).slice(0,2+Math.floor(R()*3)).map(x=>x[1]); return ilk.concat(kalan).sort((a,b)=>a.orb-b.orb); })().map(n=>{
        const key=[n.a,n.b].sort().join("|"), cf=K.CIFT[key];
        const ozel = cf ? (sadNazar(n)?cf[0]:nahsNazar(n)?cf[1]:cf[2]) : (sadNazar(n)?`${K.YILDIZ_KEY[n.a]} ile ${K.YILDIZ_KEY[n.b]} birbirine yardım eder.`:nahsNazar(n)?`${K.YILDIZ_KEY[n.a]} ile ${K.YILDIZ_KEY[n.b]} arasında bir çekişme vardır; biri öbürünü sıkıştırır.`:`${K.YILDIZ_KEY[n.a]} ile ${K.YILDIZ_KEY[n.b]} birbirine karışır ve tek bir kuvvet gibi işler.`);
        return `${PAD(n.a)} ile ${PAD(n.b)} ${K.NAZAR_TUR[n.tur]}${n.orb<2?", hem de pek yakın dereceden":""}. ${ozel.charAt(0).toLocaleUpperCase("tr")+ozel.slice(1)}`; }),
@@ -246,17 +251,20 @@ function oku(c, ctx){
   if(!saatYok && (zuhal7 || yer("Zuhal")===5)) ask -= 1;
   const askTavan = zuhal7 ? 2 : 3;
   if(!saatYok && (yer("Zuhre")===5 || yer("Zuhre")===7) && venus.hal!=="vebâl") ask += 1;
-  ask = Math.max(1, Math.min(askTavan, ask));
-  const ruhPuan = (menzil[0]==="s"?1:0) + (K.UNSUR[top].tamamlayan===yediEl||top===yediEl?1:0) + (SAD[yedinciSahip]>0?1:0) + (varMi("Zuhre")||varMi("Musteri")?1:0);
+  ask = oyna(Math.max(1, Math.min(askTavan, ask)), 1, askTavan, 0.2);
+  let ruhPuan = (menzil[0]==="s"?1:0) + (K.UNSUR[top].tamamlayan===yediEl||top===yediEl?1:0) + (SAD[yedinciSahip]>0?1:0) + (varMi("Zuhre")||varMi("Musteri")?1:0);
   let huzur = SAD[yedinciSahip] + (K.UNSUR[top].karsit===yediEl?-1:K.UNSUR[top].tamamlayan===yediEl||top===yediEl?1:0) + (menzil[0]==="s"?1:menzil[0]==="n"?-1:0) + (varMi("Mirrih")?-1:0);
   huzur += sadHane(7) + T_huzur.puan;
-  const huzurD = huzur<=-1?0:huzur<=1?1:2;
+  ruhPuan = oyna(ruhPuan, 0, 4, 0.15);
+  const huzurD = oyna(huzur<=-1?0:huzur<=1?1:2, 0, 2, 0.15);
   const esElem = K.UNSUR[top].tamamlayan;
-  const esHarfler = (()=>{ const pool=[...new Set([...ES_HARF[esElem], ...ES_HARF[yediEl]])]; const out=[]; while(out.length<3&&pool.length) out.push(pool.splice(Math.floor(R()*pool.length),1)[0]); return out; })();
+  const esHarfler = (()=>{ const pool=[...new Set([...ES_HARF[esElem], ...ES_HARF[yediEl]])]; const out=[]; while(out.length<3&&pool.length) out.push(pool.splice(Math.floor(Rh()*pool.length),1)[0]); return out; })();
   const ayrilikSebep = {Mirrih:"ani bir öfke, sert sözler ve inatlaşma",Zuhal:"soğukluk, uzun suskunluklar, maddi darlık yahut aile büyüklerinin baskısı",Utarid:"söz taşıyanlar, yanlış anlaşılmalar ve dedikodu",Kamer:"hislerin gelgiti ve ailelerin evliliğe karışması",Zuhre:"kıskançlık ve gözün başka güzelliklere kayması",Sems:"gurur ve kimin haklı olduğu kavgası",Musteri:"ölçüsüz harcama yahut inanç ve hayat görüşü farkı"}[yedinciSahip];
   let ilkYas = zuhal7 ? [27,31] : {Ateş:[20,24],Hava:[21,25],Su:[22,26],Toprak:[24,28]}[top].slice();
   const kay = Math.max(-2, Math.min(4, T_gec.puan));
-  ilkYas = [ilkYas[0]+kay, ilkYas[1]+kay];
+  const oyn = oyna(0, -1, 1, 0.25), gen = R()<0.3 ? 1 : 0;
+  ilkYas = [ilkYas[0]+kay+oyn, ilkYas[1]+kay+oyn+gen];
+  if(zuhal7 && ilkYas[0]<26){ ilkYas=[26, Math.max(ilkYas[1],29)]; }
   const zuhalGec = zuhal7 || T_gec.puan>=2;
   const gecGerekce = (zuhal7?["Zühal'in izdivaç hânesinde oturması"]:[]).concat(T_gec.gerekce);
   S.push({id:"evlilik", title:"Evlilik ve Aşk", subs:[
@@ -310,9 +318,9 @@ function oku(c, ctx){
     .ekle(varMi("Zuhal"), -1, "kaderinde Zühal'in eli bulunması")
     .ekle(top==="Ateş"&&bes.verim===0, -1, "ateş harflerinin kısır bir burçla birleşmesi");
   let evlat = bes.verim + 1 + Math.max(-1, Math.min(1, T_evlat.puan));
-  evlat = Math.max(1, Math.min(5, evlat));
+  evlat = oyna(Math.max(1, Math.min(5, evlat)), bes.verim===0?1:2, bes.verim===0?3:5, 0.2);
   const evlatStr = ["","bir yahut iki","iki","iki yahut üç","üç","üç yahut dört"][evlat];
-  let erkek = (bes.cins==="erkek"?1:-1) + ERKEK_YILDIZ[c.hourRuler] + ((top==="Ateş"||top==="Hava")?1:-1) + ERKEK_YILDIZ[c.isimYildiz];
+  let erkek = (R()<0.5?0:(R()<0.5?-1:1)) + (bes.cins==="erkek"?1:-1) + ERKEK_YILDIZ[c.hourRuler] + ((top==="Ateş"||top==="Hava")?1:-1) + ERKEK_YILDIZ[c.isimYildiz];
   S.push({id:"cocuk", title:"Çocuk ve Yuva", subs:[
    {h:"Muhtemel Evlât Sayısı", p:P(
      `Tâli'den beşinci hane evlât hanesidir. Senin beşinci hanen ${BURC[besinciI][0]} (${BURC[besinciI][1]}) burcuna düşer. ${bes.evlat}`,
@@ -378,6 +386,37 @@ function oku(c, ctx){
    !saatYok && {h:"Onuncu Hânedeki Yıldızlar", p:P(...haneYorum(10))},
    !saatYok && {h:"İkinci Hânedeki Yıldızlar", p:P(...haneYorum(2))}
   ].filter(Boolean)});
+
+  /* ============ Tazeleme: hüküm aynı, anlatım ve seçki her bakışta başka ============ */
+  (function tazele(){
+    const karistir = a => { for(let i=a.length-1;i>0;i--){ const j=Math.floor(R()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+    // hüküm taşıyan paragraf: sayı, yaş, sayı kelimesi yahut dayanak içerir; bunlar asla atlanmaz
+    const hukumlu = t => /\d|yaş|evlât sayısı|büyük aşk|nikâh|dayanak|tartılan|ihtimali|kere|hânede|hânesi|burcuna düşer|burcunda/.test(t);
+    const baglidir = t => /^(Bu |Bunun|Bunlar|Hepsi|Ayrıca|Ama |Lâkin|Ancak|O |Onun)/.test(t);
+    const BOL = {hurif:"hurif",karakter:"karakter",evlilik:"ask",cocuk:"cocuk",is:"is"};
+    const sinonim = t => { (K.SINONIM||[]).forEach(([re,alts])=>{ t=t.replace(re,()=>alts[Math.floor(R()*alts.length)]); }); return t; };
+    S.forEach(sec=>{
+      const key = BOL[sec.id]||"genel";
+      const baglac = karistir((K.BAGLAC||[]).slice());
+      sec.subs.forEach(sub=>{
+        let p = sub.p.filter(Boolean);
+        // 1) seçki: uzun bahislerde hüküm taşımayan bir paragraf bazen dinlendirilir
+        if(p.length>=4 && R()<0.45){ const aday=p.map((t,i)=>i).filter(i=>i>0&&!hukumlu(p[i])&&!(p[i+1]&&baglidir(p[i+1]))); if(aday.length){ p.splice(aday[Math.floor(R()*aday.length)],1); } }
+        // 2) sıra: ilk paragraf yerinde kalır; birbirine bağlı olmayanlar yer değiştirebilir
+        if(p.length>=3 && !p.slice(1).some(baglidir) && R()<0.5){ p=[p[0], ...karistir(p.slice(1))]; }
+        // 3) söyleyiş ve geçişler
+        p = p.map((t,i)=>{ t=sinonim(t); if(i>0 && !baglidir(t) && baglac.length && R()<0.2) t=`${baglac.pop()} ${t}`; return t; });
+        sub.p = p;
+      });
+      // 4) kadîm söz ve tavsiye: her bakışta başka
+      const sozler = karistir(((K.SOZ&&K.SOZ[key])||[]).concat(R()<0.5?(K.SOZ?K.SOZ.genel:[]):[]));
+      const yer = karistir(sec.subs.map((_,i)=>i)).slice(0, Math.min(sec.subs.length, 1+Math.floor(R()*2)));
+      yer.forEach((si,n)=>{ if(sozler[n]) sec.subs[si].p.push(`«${sozler[n]}»`); });
+      const tv = K.TAVSIYE && K.TAVSIYE[key];
+      if(tv && tv.length){ const hedef = sec.subs[sec.subs.length-1]; hedef.p.push(sinonim(tv[Math.floor(R()*tv.length)])); }
+    });
+    // nazar bahsinde her seferinde başka nazarlar öne çıkar (hepsi hesaplanmış gerçek nazarlardır)
+  })();
 
   /* ============ Özet ============ */
   const SIFAT = {Hamel:"atılgan",Sevr:"sabırlı",Cevzâ:"çevik",Seretân:"hassas",Esed:"izzetli",Sünbüle:"titiz",Mîzân:"zarif",Akreb:"derin",Kavs:"hür",Cedy:"ağırbaşlı",Delv:"başkalarına benzemeyen",Hût:"rüyalı"};

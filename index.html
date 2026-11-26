@@ -398,7 +398,7 @@ body{background:
     </form>
     <div class="panel formsum" id="formSum">
       <div class="who"><b id="sumAd"></b><span id="sumDetay"></span></div>
-      <div class="acts"><button type="button" class="ghost" id="duzenle">Düzenle</button><button type="button" class="ghost pri" id="yeniFal">Yeni fal</button></div>
+      <div class="acts"><button type="button" class="ghost" id="tazeBak" title="Aynı bilgilerle, başka bir gözle yeniden yorumla">Başka gözle yorumla</button><button type="button" class="ghost" id="duzenle">Düzenle</button><button type="button" class="ghost pri" id="yeniFal">Yeni fal</button></div>
     </div>
   </aside>
 
@@ -441,6 +441,7 @@ body{background:
 <script src="kitap-burc.js"></script>
 <script src="kitap-yildiz.js"></script>
 <script src="kitap-hane.js"></script>
+<script src="kitap-uslup.js"></script>
 <script src="motor.js"></script>
 <script src="isimler.js"></script>
 <script src="yerler.js"></script>
@@ -853,6 +854,7 @@ $("f").addEventListener("submit",ev=>{ ev.preventDefault();
   if(!trToArabic(inp.ad)||!trToArabic(inp.anne)){ setStatus("İsimler yalnızca harflerden oluşmalı.",true); $("ad").focus(); return; }
   let c; try{ c=compute(inp); }catch(e){ setStatus("Hesap yapılamadı. Tarih ve saati kontrol et.",true); return; }
   run(c); });
+$("tazeBak").addEventListener("click",()=>{ if(!CUR) return; const sec=TL[cur]&&TL[cur].id; run(CUR,sec); });
 $("yeniFal").addEventListener("click",()=>{ $("f").reset(); clearYer(); $("saat").disabled=false; $("sonuc").hidden=true; $("intro").hidden=false; layout.classList.remove("has-result"); window.scrollTo({top:0,behavior:still()?"auto":"smooth"}); setTimeout(()=>$("ad").focus({preventScroll:true}),350); });
 $("duzenle").addEventListener("click",()=>{ layout.classList.remove("has-result"); window.scrollTo({top:0,behavior:still()?"auto":"smooth"}); setTimeout(()=>$("ad").focus({preventScroll:true}),350); });
 })();
