@@ -74,6 +74,23 @@ h1,h2,h3{font-family:var(--f-head);font-weight:600;color:var(--moon);letter-spac
 .status{font-size:.9rem;color:var(--silver2);text-align:center;min-height:1.4em;margin:0}
 .status.err{color:#F3B8B8}
 
+/* ---------- Yer listesi ---------- */
+.ac{position:relative}
+.aclist{position:absolute;left:0;right:0;top:calc(100% - 1.3rem);z-index:20;margin:0;padding:.35rem;list-style:none;max-height:min(330px,50vh);overflow:auto;
+  background:rgba(10,15,36,.97);border:1px solid var(--line2);border-radius:14px;box-shadow:0 24px 50px -14px rgba(0,0,0,.85)}
+.aclist li{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.6rem .75rem;border-radius:10px;cursor:pointer}
+.aclist li b{font-weight:500;color:var(--moon)}
+.aclist li span{font-size:.82rem;color:var(--muted);text-align:right}
+.aclist li.on,.aclist li:hover{background:rgba(213,219,230,.12)}
+/* tarih ve saat: tarayıcının mavi vurgusu yerine gümüş */
+::selection{background:rgba(213,219,230,.3);color:#fff}
+.f input::-webkit-datetime-edit{color:var(--moon)}
+.f input::-webkit-datetime-edit-fields-wrapper{padding:0}
+.f input::-webkit-datetime-edit-day-field,.f input::-webkit-datetime-edit-month-field,.f input::-webkit-datetime-edit-year-field,.f input::-webkit-datetime-edit-hour-field,.f input::-webkit-datetime-edit-minute-field,.f input::-webkit-datetime-edit-ampm-field{background-color:transparent!important;color:var(--moon)!important}
+.f input::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.75;cursor:pointer}
+.f input{accent-color:#D5DBE6}
+input,button,li{-webkit-tap-highlight-color:transparent}
+
 /* ---------- Sonuç ---------- */
 #sonuc{padding-top:3rem;scroll-margin-top:16px}
 .sechead{text-align:center;margin:0 0 1.6rem}
@@ -166,9 +183,11 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
         <div class="f"><label for="tarih">Doğum tarihi</label><input id="tarih" name="tarih" type="date" required></div>
         <div class="f"><label for="saat">Doğum saati</label><input id="saat" name="saat" type="time" required></div>
       </div>
-      <div class="f"><label for="yer">Doğum yeri</label><input id="yer" name="yer" list="sehirler" required autocomplete="off" placeholder="İstanbul"><span class="hint">Türkiye'nin 81 ili ve yurt dışındaki bazı şehirler listede var.</span></div>
+      <div class="f ac"><label for="yer">Doğum yeri</label>
+        <input id="yer" name="yer" required autocomplete="off" spellcheck="false" placeholder="İl, ilçe ya da şehir yaz" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="yerList">
+        <ul id="yerList" class="aclist" role="listbox" aria-label="Doğum yeri önerileri" hidden></ul>
+        <span class="hint" id="yerHint">Türkiye'nin bütün il ve ilçeleri, dünyadan 7 binden fazla şehir. Yazmaya başla, listeden seç.</span></div>
     </div>
-    <datalist id="sehirler"></datalist>
     <div class="go">
       <button type="submit" class="btn" id="go">Falıma Bak</button>
       <p class="status" id="status" aria-live="polite"></p>
@@ -198,6 +217,7 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
 <script src="kitap-burc.js"></script>
 <script src="kitap-yildiz.js"></script>
 <script src="motor.js"></script>
+<script src="yerler.js"></script>
 <script>
 (function(){
 "use strict";
@@ -274,7 +294,7 @@ function compute(inp){
   const top=nm.total+an.total;
   const k12=((top-1)%12)+1, k7=((top-1)%7)+1, k4=top%4;
   const isimBurc=BURC[k12-1], isimYildiz=CHALDEAN[k7-1], isimUnsur=["Su","Ateş","Toprak","Hava"][k4];
-  const ck=keyCity(inp.yer); let city=CITIES.find(c=>keyCity(c[0])===ck); const cityKnown=!!city;
+  let city=inp.place||null; const cityKnown=!!city;
   if(!city) city=["Ankara (yaklaşık)",39.93,32.86,IST];
   const [y,mo,d]=inp.tarih.split("-").map(Number), [hh,mi]=inp.saat.split(":").map(Number);
   const tz=city[3], t=zonedToUtc(y,mo,d,hh,mi,tz), dd=JD(t)-2451545;
@@ -348,8 +368,9 @@ function renderCetvel(c){
   box.appendChild(fact("Gezegen saati",`${PLANETS[c.hourRuler].ad} saati`,`${c.geceAdi}. Günün yıldızı ${PLANETS[c.dayRuler].ad}`));
   box.appendChild(fact("Kadersel düğümler",`Re's ${signOf(c.node)[1]}`,`Zeneb ${signOf(n360(c.node+180))[1]}`));
   box.appendChild(fact("Esmâ",`Yâ ${c.esmaAd[0].tr}`,c.esmaAd.map(x=>`${x.tr} ${x.v}`).join(" · ")));
+  if(c.cityKnown) box.appendChild(fact("Doğum yeri",c.city[0],`${c.city[1].toFixed(2)}° K, ${c.city[2].toFixed(2)}° D · ${c.tz}`,true));
   if(c.hicri) box.appendChild(fact("Hicrî doğum",c.hicri,null));
-  if(!c.cityKnown) box.appendChild(fact("Doğum yeri","Listede yok","Saat hesabı Türkiye saatine ve Ankara'ya göre yaklaşık yapıldı.",true));
+  if(!c.cityKnown) box.appendChild(fact("Doğum yeri","Bulunamadı","Yazdığın yer listede çıkmadı; saat hesabı Ankara'ya göre yaklaşık yapıldı. Listeden seçersen daha doğru olur.",true));
 }
 function renderTable(){
   const tb=document.querySelector("#harfTablo tbody");
@@ -384,8 +405,41 @@ function run(c){
   requestAnimationFrame(()=>sec.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"}));
 }
 
+/* ---------- Doğum yeri araması ---------- */
+const fold=s=>s.toLocaleLowerCase("tr").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ı/g,"i").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+const YIDX=(window.YERLER||[]).map(y=>({y,k:fold(y[0]),u:fold(y[1])}));
+let chosen=null, hits=[], act=-1;
+function label(y){ return `${y[0]}, ${y[1]}`; }
+function toCity(y){ return [label(y),y[2],y[3],window.YER_TZ[y[4]]]; }
+function search(q){ q=fold(q); if(!q) return [];
+  const parts=q.split(/[ ,]+/).filter(Boolean), first=parts[0], rest=parts.slice(1);
+  const out=[];
+  for(const e of YIDX){ let sc=-1;
+    if(e.k===q) sc=4; else if(e.k.startsWith(q)) sc=3; else if(e.k.startsWith(first)&&rest.every(r=>e.u.includes(r)||e.k.includes(r))) sc=2.5; else if(q.length>2&&e.k.includes(q)) sc=1;
+    if(sc<0) continue; out.push([sc,e]); }
+  out.sort((a,b)=>b[0]-a[0]||b[1].y[5]-a[1].y[5]); return out.slice(0,8).map(x=>x[1].y); }
+function firstMatch(q){ const h=search(q); return h.length?toCity(h[0]):null; }
+const yerIn=$("yer"), yerList=$("yerList");
+function openList(){ yerList.hidden=!hits.length; yerIn.setAttribute("aria-expanded",String(!!hits.length)); }
+function closeList(){ yerList.hidden=true; yerIn.setAttribute("aria-expanded","false"); act=-1; yerIn.removeAttribute("aria-activedescendant"); }
+function drawList(){ yerList.textContent="";
+  hits.forEach((y,i)=>{ const li=el("li",i===act?"on":null); li.id="yer-o"+i; li.setAttribute("role","option"); li.setAttribute("aria-selected",String(i===act));
+    li.appendChild(el("b",null,y[0])); li.appendChild(el("span",null,y[1]));
+    li.addEventListener("mousedown",ev=>{ ev.preventDefault(); pick(i); }); yerList.appendChild(li); });
+  if(act>=0) yerIn.setAttribute("aria-activedescendant","yer-o"+act); openList(); }
+function pick(i){ const y=hits[i]; if(!y) return; chosen={label:label(y),city:toCity(y)}; yerIn.value=chosen.label; closeList(); }
+yerIn.addEventListener("input",()=>{ chosen=null; hits=search(yerIn.value); act=hits.length?0:-1; drawList(); });
+yerIn.addEventListener("focus",()=>{ if(yerIn.value&&!chosen){ hits=search(yerIn.value); drawList(); } });
+yerIn.addEventListener("blur",()=>setTimeout(closeList,120));
+yerIn.addEventListener("keydown",ev=>{ if(yerList.hidden) return;
+  if(ev.key==="ArrowDown"){ ev.preventDefault(); act=(act+1)%hits.length; drawList(); }
+  else if(ev.key==="ArrowUp"){ ev.preventDefault(); act=(act-1+hits.length)%hits.length; drawList(); }
+  else if(ev.key==="Enter"&&act>=0){ ev.preventDefault(); pick(act); }
+  else if(ev.key==="Escape"){ closeList(); } });
+
 /* ---------- Akış ---------- */
-function readForm(){ return {ad:$("ad").value.trim(),anne:$("anne").value.trim(),tarih:$("tarih").value,saat:$("saat").value,yer:$("yer").value.trim()}; }
+function readForm(){ const yer=$("yer").value.trim(); const place=chosen&&chosen.label===yer?chosen.city:(yer?firstMatch(yer):null);
+  return {ad:$("ad").value.trim(),anne:$("anne").value.trim(),tarih:$("tarih").value,saat:$("saat").value,yer,place}; }
 function setStatus(t,err){ const s=$("status"); s.textContent=t; s.className=err?"status err":"status"; }
 $("f").addEventListener("submit",ev=>{ ev.preventDefault();
   const inp=readForm();
@@ -394,9 +448,9 @@ $("f").addEventListener("submit",ev=>{ ev.preventDefault();
   if(!trToArabic(inp.ad)||!trToArabic(inp.anne)){ setStatus("İsimler yalnızca harflerden oluşmalı.",true); $("ad").focus(); return; }
   let c; try{ c=compute(inp); }catch(e){ setStatus("Hesap yapılamadı. Tarih ve saati kontrol et.",true); return; }
   run(c); });
-$("yeni").addEventListener("click",()=>{ $("f").reset(); $("sonuc").hidden=true; $("yorum").textContent=""; setStatus("");
+$("yeni").addEventListener("click",()=>{ $("f").reset(); chosen=null; $("sonuc").hidden=true; $("yorum").textContent=""; setStatus("");
   $("f").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"}); setTimeout(()=>$("ad").focus({preventScroll:true}),500); });
-const dl=$("sehirler"); CITIES.forEach(c=>{ const o=document.createElement("option"); o.value=c[0]; dl.appendChild(o); });
+
 renderTable();
 })();
 </script>
