@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yıldızname-i Esrâr</title>
+<meta name="description" content="İsmin, annenin ismi ve doğduğun anın gökyüzüne göre eski müneccimlerin usulüyle yıldızname.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&display=swap">
+<style>
+/* Düzen: İznik çinisi kobalt gök (başlık + doğum gökyüzü çarkı), üstüne binen beyaz çini form kartı, altta harf taşları ve bölüm bölüm yorum */
+@property --rot{syntax:"<angle>";inherits:true;initial-value:0deg}
+:root{
+  --porcelain:#EAF0F7; --paper:#FFFFFF; --paper2:#F4F7FB;
+  --ink:#16224D; --muted:#58648A; --line:#D3DCEA;
+  --cobalt:#1C3A8F; --cobalt-deep:#132A6E; --on-cobalt:#F1F5FC; --on-cobalt-muted:#B9C6EC;
+  --tile:#C2362B; --tile-ink:#FFFFFF; --turq:#178F86; --gold:#E3A72A;
+  --el-ates:#C2362B; --el-hava:#B8860B; --el-su:#1F6FB8; --el-toprak:#7A5B32;
+  --shadow:rgba(19,42,110,.28); --heading:#1C3A8F; --sum:#1C3A8F;
+  --f-display:"Yeseva One","Bodoni Moda",Didot,Georgia,serif;
+  --f-body:"Literata",Charter,Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --porcelain:#0C1330; --paper:#141E45; --paper2:#1A2654;
+  --ink:#E8EEFA; --muted:#A4AFD0; --line:#2B3A72;
+  --cobalt:#16296C; --cobalt-deep:#0E1D52; --on-cobalt:#F1F5FC; --on-cobalt-muted:#AFBDE6;
+  --tile:#E0554A; --tile-ink:#FFFFFF; --turq:#3CC2B5; --gold:#F0BC4A;
+  --el-ates:#F0705F; --el-hava:#E8BE4E; --el-su:#6AAEF0; --el-toprak:#C99C66;
+  --shadow:rgba(0,0,0,.55); --heading:#E8EEFA; --sum:#F0BC4A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --porcelain:#0C1330; --paper:#141E45; --paper2:#1A2654;
+  --ink:#E8EEFA; --muted:#A4AFD0; --line:#2B3A72;
+  --cobalt:#16296C; --cobalt-deep:#0E1D52; --on-cobalt:#F1F5FC; --on-cobalt-muted:#AFBDE6;
+  --tile:#E0554A; --tile-ink:#FFFFFF; --turq:#3CC2B5; --gold:#F0BC4A;
+  --el-ates:#F0705F; --el-hava:#E8BE4E; --el-su:#6AAEF0; --el-toprak:#C99C66;
+  --shadow:rgba(0,0,0,.55); --heading:#E8EEFA; --sum:#F0BC4A; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--porcelain);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.in{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,legend{font-family:var(--f-display);font-weight:400;text-wrap:balance}
+
+/* ---------- Başlık: kobalt gök ---------- */
+.hero{margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:calc(env(safe-area-inset-top,0px) + 3.5rem);padding-bottom:8.5rem;color:var(--on-cobalt);
+  background:
+   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='white' stroke-opacity='.07'%3E%3Crect x='16' y='16' width='24' height='24'/%3E%3Crect x='16' y='16' width='24' height='24' transform='rotate(45 28 28)'/%3E%3C/g%3E%3C/svg%3E"),
+   radial-gradient(ellipse 70% 90% at 78% 40%,var(--cobalt) 0%,var(--cobalt-deep) 75%);}
+.hero .in{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(2rem,5vw,4.5rem);align-items:center}
+.hero h1{font-size:clamp(3rem,8.4vw,6.4rem);line-height:.95;margin:0 0 1.4rem;letter-spacing:-.01em}
+.hero h1 span{display:block;font-size:.48em;color:var(--gold);margin-top:.35rem;letter-spacing:.01em}
+.lede{font-size:clamp(1.08rem,1.6vw,1.25rem);color:var(--on-cobalt);max-width:30em;margin:0 0 1.6rem;opacity:.92}
+.five{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.five li{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:.25rem .85rem;font-size:.92rem;color:var(--on-cobalt)}
+.sky{min-width:0}
+.sky svg{display:block;width:100%;max-width:440px;margin:0 auto;height:auto;overflow:visible}
+.wheel{transform:rotate(var(--rot));transition:--rot 1.6s cubic-bezier(.2,.7,.1,1)}
+.wheel .lbl{transform-box:fill-box;transform-origin:center;transform:rotate(calc(var(--rot) * -1))}
+.skycap{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem 1.2rem;margin:1rem 0 0;padding:0;list-style:none;font-size:.95rem;color:var(--on-cobalt-muted)}
+.skycap b{color:var(--on-cobalt);font-weight:500}
+.dot{display:inline-block;width:.7em;height:.7em;border-radius:50%;margin-right:.4em;vertical-align:.02em}
+
+/* ---------- Form kartı ---------- */
+.formwrap{margin-top:-6rem;position:relative}
+.card{background:var(--paper);border-radius:26px;box-shadow:0 40px 70px -40px var(--shadow),0 2px 0 var(--line);overflow:hidden}
+.band{height:16px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='16' viewBox='0 0 32 16'%3E%3Crect width='32' height='16' fill='%23C2362B'/%3E%3Cpath d='M16 2.5 19.5 8 16 13.5 12.5 8Z' fill='%23fff'/%3E%3Ccircle cx='0' cy='8' r='3' fill='%23178F86'/%3E%3Ccircle cx='32' cy='8' r='3' fill='%23178F86'/%3E%3C/svg%3E") repeat-x}
+.cardbody{padding:clamp(1.4rem,4vw,3rem)}
+.formhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.5rem 2rem;margin-bottom:1.6rem}
+.formhead h2{font-size:clamp(1.9rem,3.6vw,2.6rem);margin:0;color:var(--heading);line-height:1.1}
+.formhead p{margin:0;color:var(--muted);max-width:28em}
+.sets{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:1.4rem}
+fieldset{border:0;margin:0;padding:1.3rem 1.3rem 1.4rem;background:var(--paper2);border-radius:18px;min-width:0}
+legend{float:left;width:100%;font-size:1.3rem;margin:0 0 .9rem;padding:0;color:var(--ink)}
+legend small{font-family:var(--f-body);font-size:.85rem;color:var(--muted);margin-left:.5rem}
+.fields{clear:both;display:grid;gap:1rem}
+.fields.two{grid-template-columns:1fr}
+.fields.three{grid-template-columns:repeat(2,minmax(0,1fr))}
+.fields.three .wide{grid-column:1 / -1}
+.f label{display:block;font-size:.95rem;font-weight:500;color:var(--ink);margin-bottom:.35rem}
+.f input{display:block;width:100%;min-width:0;height:3.4rem;font:inherit;font-size:1.15rem;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:12px;padding:0 1rem;transition:border-color .15s}
+.f input:hover{border-color:var(--muted)}
+.f input:focus{outline:none;border-color:var(--turq);box-shadow:0 0 0 4px color-mix(in srgb,var(--turq) 22%,transparent)}
+.f .hint{display:block;font-size:.85rem;color:var(--muted);margin-top:.35rem}
+.go{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.6rem;margin-top:1.8rem}
+.btn{font-family:var(--f-display);font-size:1.35rem;letter-spacing:.01em;cursor:pointer;border:0;border-radius:999px;padding:.95rem 2.4rem;background:var(--tile);color:var(--tile-ink);box-shadow:0 10px 24px -10px var(--tile);transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 14px 28px -10px var(--tile)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.btn:focus-visible,.ghost:focus-visible,summary:focus-visible{outline:3px solid var(--turq);outline-offset:3px}
+.ghost{font:inherit;font-weight:500;cursor:pointer;border:2px solid var(--cobalt);color:var(--ink);background:transparent;border-radius:999px;padding:.55rem 1.3rem}
+.status{color:var(--turq);font-size:1rem;flex:1 1 16rem;min-width:0}
+.err{color:var(--tile)}
+
+/* ---------- Cetvel ---------- */
+section.part{margin-top:clamp(3rem,7vw,5rem)}
+.parthead{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem;margin-bottom:1.4rem}
+.parthead h2{font-size:clamp(1.9rem,3.6vw,2.6rem);margin:0;line-height:1.1}
+.chip{font-size:.85rem;border-radius:999px;padding:.15rem .75rem;background:var(--gold);color:#2a1d00}
+.namerow{background:var(--paper);border-radius:20px;padding:1.3rem clamp(1rem,3vw,1.8rem);margin-bottom:1rem;min-width:0}
+.namerow h3{font-size:1.35rem;margin:0 0 .9rem}
+.namerow h3 em{font-style:normal;color:var(--muted);font-family:var(--f-body);font-size:.95rem;margin-left:.4rem}
+.tiles{display:flex;flex-wrap:wrap;align-items:stretch;gap:.5rem}
+.tilel{width:4.6rem;border-radius:12px;background:var(--paper2);border-top:5px solid var(--c);padding:.45rem .3rem .5rem;text-align:center;line-height:1.15}
+.tilel .t{font-family:var(--f-display);font-size:1.9rem;display:block;color:var(--ink)}
+.tilel .n{font-size:.82rem;color:var(--muted);display:block;margin-top:.15rem}
+.tilel .v{font-size:1rem;font-weight:600;display:block;font-variant-numeric:tabular-nums;color:var(--c)}
+.sum{display:flex;align-items:center;gap:.6rem;padding:0 .4rem;font-family:var(--f-display);font-size:2.4rem;color:var(--sum);font-variant-numeric:tabular-nums}
+.sum small{font-family:var(--f-body);font-size:.85rem;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;font-size:.9rem;color:var(--muted);margin:.2rem 0 1.4rem}
+.legend span::before{content:"";display:inline-block;width:.8em;height:.8em;border-radius:3px;background:var(--c);margin-right:.4em;vertical-align:-.05em}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border-radius:20px;overflow:hidden;border:1px solid var(--line)}
+.fact{background:var(--paper);padding:1.1rem 1.3rem 1.2rem;min-width:0}
+.fact .k{font-size:.9rem;color:var(--muted)}
+.fact .v{font-family:var(--f-display);font-size:1.45rem;line-height:1.25;margin:.25rem 0 .3rem;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.fact .n{font-size:.92rem;color:var(--muted);line-height:1.5}
+.bar{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:.55rem 0 .45rem;gap:2px}
+.bar i{background:var(--c);display:block}
+details{margin-top:1.2rem;background:var(--paper);border-radius:16px;padding:1rem 1.3rem}
+summary{cursor:pointer;font-weight:600;color:var(--ink)}
+details p{max-width:40em;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;font-size:.95rem;min-width:420px;width:100%}
+th,td{border-bottom:1px solid var(--line);padding:.4rem .7rem;text-align:left;font-variant-numeric:tabular-nums}
+th{font-weight:600;color:var(--muted);font-size:.88rem}
+
+/* ---------- Yorum ---------- */
+.reading-wrap{background:var(--paper);border-radius:26px;overflow:hidden}
+.reading-wrap .cardbody{display:grid;gap:.4rem}
+.chapter{max-width:40em;margin:0 auto;width:100%}
+.chapter + .chapter{border-top:1px solid var(--line);padding-top:1.6rem;margin-top:1.4rem}
+.chapter h3{display:flex;align-items:center;gap:.7rem;font-size:clamp(1.6rem,3vw,2.1rem);margin:0 0 .6rem;color:var(--ink)}
+.chapter h3 svg{flex:none;width:1.1em;height:1.1em;color:var(--tile)}
+.reading p{margin:.4rem 0 1rem}
+.reading h4{font-family:var(--f-body);font-weight:600;font-size:1.12rem;color:var(--turq);margin:1.5rem 0 .3rem}
+.reading ul{padding-left:1.2rem}
+.reading strong{font-weight:600}
+.pending{color:var(--muted);font-style:italic}
+.intro-empty{max-width:40em;margin:0 auto;color:var(--muted)}
+.fallback textarea{width:100%;min-height:220px;font:inherit;font-size:.9rem;background:var(--paper2);color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:.8rem}
+footer{color:var(--muted);font-size:.92rem;text-align:center;padding-block:3rem 4rem;max-width:36em;margin:0 auto}
+
+@media (prefers-reduced-motion:no-preference){.reading.live{animation:fade .6s ease}@keyframes fade{from{opacity:.4}to{opacity:1}}}
+@media (prefers-reduced-motion:reduce){.wheel{transition:none}.btn{transition:none}}
+@media (max-width:880px){
+  .hero .in{grid-template-columns:1fr}
+  .sky svg{max-width:360px}
+  .sets{grid-template-columns:1fr}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  body{font-size:17px}
+  .hero{padding-bottom:7.5rem}
+  .fields.three{grid-template-columns:1fr}
+  .facts{grid-template-columns:1fr}
+  .btn{width:100%}
+  .tilel{width:4.1rem}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="in">
+    <div>
+      <h1>Yıldızname<span>-i Esrâr</span></h1>
+      <p class="lede">İsminin ve annenin isminin harfleri ebced ile tartılır, doğduğun ânın gökyüzü çizilir. Sonra eski yıldıznamelerin, cifir ve hurûf kitaplarının hükümlerine göre beş konuda yorum çıkarılır.</p>
+      <ul class="five" aria-label="Yorumun konuları">
+        <li>Harfler ve yıldız</li><li>Karakter ve kader</li><li>Evlilik ve aşk</li><li>Çocuk ve yuva</li><li>İş ve rızık</li>
+      </ul>
+    </div>
+    <figure class="sky" style="margin:0">
+      <svg id="wheelSvg" viewBox="-200 -200 400 400" role="img" aria-labelledby="skyTitle">
+        <title id="skyTitle">Doğum ânının gökyüzü: on iki burç, Güneş, Ay ve yükselen burç</title>
+        <g id="wheel" class="wheel"></g>
+        <g id="ascMark"></g>
+      </svg>
+      <figcaption><ul class="skycap" id="skycap"></ul></figcaption>
+    </figure>
+  </div>
+</header>
+
+<main>
+<div class="in formwrap">
+  <form id="f" class="card" novalidate>
+    <div class="band" aria-hidden="true"></div>
+    <div class="cardbody">
+      <div class="formhead">
+        <h2>Falına bakalım</h2>
+        <p>Beş bilgiyle hesap yapılır. Doğum saati ne kadar doğruysa yükselen burç o kadar doğru çıkar.</p>
+      </div>
+      <div class="sets">
+        <fieldset>
+          <legend>İsimler</legend>
+          <div class="fields two">
+            <div class="f"><label for="ad">Adın</label><input id="ad" name="ad" required autocomplete="off" value="Ayşe"></div>
+            <div class="f"><label for="anne">Annenin adı</label><input id="anne" name="anne" required autocomplete="off" value="Fatma"></div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Doğduğun an</legend>
+          <div class="fields three">
+            <div class="f"><label for="tarih">Doğum tarihi</label><input id="tarih" name="tarih" type="date" required value="1990-05-14"></div>
+            <div class="f"><label for="saat">Doğum saati</label><input id="saat" name="saat" type="time" required value="06:40"></div>
+            <div class="f wide"><label for="yer">Doğum yeri</label><input id="yer" name="yer" list="sehirler" required autocomplete="off" value="İstanbul"><span class="hint">Türkiye'deki 81 il ve yurt dışındaki bazı şehirler listede var.</span></div>
+          </div>
+        </fieldset>
+      </div>
+      <datalist id="sehirler"></datalist>
+      <div class="go">
+        <button type="submit" class="btn" id="go">Falımı aç</button>
+        <span class="status" id="status" aria-live="polite">Örnek bilgiler yazılı. Kendi bilgilerini girip “Falımı aç”a bas.</span>
+      </div>
+    </div>
+  </form>
+</div>
+
+<section class="part in" id="cetvelBox" aria-labelledby="cetvelH">
+  <div class="parthead"><h2 id="cetvelH">Hesap cetveli</h2><span class="chip" id="ornekTag">Örnek bilgilerle</span></div>
+  <div id="names"></div>
+  <div class="legend" aria-label="Harflerin tabiatı">
+    <span style="--c:var(--el-ates)">Ateş</span><span style="--c:var(--el-hava)">Hava</span><span style="--c:var(--el-su)">Su</span><span style="--c:var(--el-toprak)">Toprak</span>
+  </div>
+  <div class="facts" id="cetvel"></div>
+  <details>
+    <summary>Harfler nasıl sayılıyor?</summary>
+    <p>Her Türkçe harf, eski yazıdaki karşılığı olan harfe çevrilir ve o harfin ebced değeri toplanır. Eski yazıda sesli harflerin çoğu yazılmadığından gerçek imlâ biraz farklı olabilir; bu hesap her harfi saydığı için sonucu bir yaklaşımdır.</p>
+    <div class="tablewrap"><table id="harfTablo"><thead><tr><th>Türkçe</th><th>Harfin adı</th><th>Ebced</th><th>Tabiatı</th></tr></thead><tbody></tbody></table></div>
+  </details>
+</section>
+
+<section class="part in" id="yorumBox" aria-labelledby="yorumH">
+  <div class="parthead"><h2 id="yorumH">Yorum</h2></div>
+  <div class="reading-wrap"><div class="band" aria-hidden="true"></div><div class="cardbody">
+    <div id="yorum"><p class="intro-empty">“Falımı aç”a bastığında yorum burada beş bölüm hâlinde yazılır: harfler ve yıldızname, karakter ve kader, evlilik ve aşk, çocuk ve yuva, iş ve rızık. Yorum hemen çıkar.</p></div>
+    <div class="go" id="copyRow" hidden><button type="button" class="ghost" id="copyAll">Yorumu kopyala</button></div>
+  </div></div>
+</section>
+</main>
+
+<footer>Bu sayfa eski müneccimlik ve cifir geleneğini eğlence ve kültür maksadıyla yaşatır. Yazılanlar kesin hüküm değildir.</footer>
+
+<script src="kitap-burc.js"></script>
+<script src="kitap-yildiz.js"></script>
+<script src="motor.js"></script>
+<script>
+(function(){
+"use strict";
+document.documentElement.lang="tr";
+/* ---------- Tablolar ---------- */
+const VAL={"ا":1,"ب":2,"ج":3,"د":4,"ه":5,"و":6,"ز":7,"ح":8,"ط":9,"ي":10,"ك":20,"ل":30,"م":40,"ن":50,"س":60,"ع":70,"ف":80,"ص":90,"ق":100,"ر":200,"ش":300,"ت":400,"ث":500,"خ":600,"ذ":700,"ض":800,"ظ":900,"غ":1000};
+const BASE={"أ":"ا","إ":"ا","آ":"ا","ٱ":"ا","ء":"ا","ؤ":"و","ئ":"ي","ى":"ي","ی":"ي","ة":"ه","ک":"ك","گ":"ك","پ":"ب","چ":"ج","ژ":"ز","ڭ":"ك"};
+const NAME={"ا":"Elif","ب":"Be","ج":"Cim","د":"Dal","ه":"He","و":"Vav","ز":"Ze","ح":"Ha","ط":"Tı","ي":"Ye","ك":"Kef","ل":"Lâm","م":"Mim","ن":"Nun","س":"Sin","ع":"Ayn","ف":"Fe","ص":"Sad","ق":"Kaf","ر":"Re","ش":"Şın","ت":"Te","ث":"Se","خ":"Hı","ذ":"Zel","ض":"Dad","ظ":"Zı","غ":"Gayın","پ":"Pe","چ":"Çim","ژ":"Je","گ":"Gef"};
+const ELEM={}; "اهطمفشذ".split("").forEach(c=>ELEM[c]="Ateş"); "بوينصتض".split("").forEach(c=>ELEM[c]="Toprak");
+"جزكسقثظ".split("").forEach(c=>ELEM[c]="Hava"); "دحلعرخغ".split("").forEach(c=>ELEM[c]="Su");
+// Türkçe harf -> Osmanlı harfi (görünen)
+const TR={a:"ا",â:"ا",b:"ب",c:"ج","ç":"چ",d:"د",e:"ه",f:"ف",g:"گ","ğ":"غ",h:"ح","ı":"ي",i:"ي",î:"ي",j:"ژ",k:"ك",l:"ل",m:"م",n:"ن",o:"و","ö":"و",p:"پ",r:"ر",s:"س","ş":"ش",t:"ت",u:"و","ü":"و",û:"و",v:"و",y:"ي",z:"ز",q:"ق",w:"و",x:"كس"};
+const TR_ROWS=[["a, â","ا"],["b","ب"],["c","ج"],["ç","چ"],["d","د"],["e","ه"],["f","ف"],["g","گ"],["ğ","غ"],["h","ح"],["ı, i, î, y","ي"],["j","ژ"],["k","ك"],["l","ل"],["m","م"],["n","ن"],["o, ö, u, ü, û, v","و"],["p","پ"],["r","ر"],["s","س"],["ş","ش"],["t","ت"],["z","ز"]];
+
+const PLANETS={Zuhal:{ad:"Zühal",tr:"Satürn",hal:"nahs-ı ekber (büyük uğursuz), ağırlık ve sabır yıldızı"},Musteri:{ad:"Müşterî",tr:"Jüpiter",hal:"sa'd-ı ekber (büyük uğurlu), rızık ve ilim yıldızı"},Mirrih:{ad:"Mirrîh",tr:"Merih",hal:"nahs-ı asgar (küçük uğursuz), kılıç ve hiddet yıldızı"},Sems:{ad:"Şems",tr:"Güneş",hal:"mümtezic, saltanat ve izzet nûru"},Zuhre:{ad:"Zühre",tr:"Venüs",hal:"sa'd-ı asgar (küçük uğurlu), muhabbet ve zînet yıldızı"},Utarid:{ad:"Utârid",tr:"Merkür",hal:"mümtezic, kâtip ve kelâm yıldızı"},Kamer:{ad:"Kamer",tr:"Ay",hal:"mümtezic, rutubet, his ve değişkenlik"}};
+const CHALDEAN=["Zuhal","Musteri","Mirrih","Sems","Zuhre","Utarid","Kamer"];
+const DAY_RULER=["Sems","Kamer","Mirrih","Utarid","Musteri","Zuhre","Zuhal"];
+const GUN=["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
+const BURC=[["Hamel","Koç","Ateş","Mirrih"],["Sevr","Boğa","Toprak","Zuhre"],["Cevzâ","İkizler","Hava","Utarid"],["Seretân","Yengeç","Su","Kamer"],["Esed","Aslan","Ateş","Sems"],["Sünbüle","Başak","Toprak","Utarid"],["Mîzân","Terazi","Hava","Zuhre"],["Akreb","Akrep","Su","Mirrih"],["Kavs","Yay","Ateş","Musteri"],["Cedy","Oğlak","Toprak","Zuhal"],["Delv","Kova","Hava","Zuhal"],["Hût","Balık","Su","Musteri"]];
+const MENAZIL=["Şeratayn","Butayn","Süreyyâ","Debarân","Hak'a","Hen'a","Zirâ'","Nesre","Tarf","Cebhe","Zübre","Sarfe","Avvâ","Simâk","Gafr","Zübânâ","İklîl","Kalb","Şevle","Neâim","Belde","Sa'dü'z-Zâbih","Sa'dü Bula'","Sa'dü's-Su'ûd","Sa'dü'l-Ahbiye","Fergu'l-Mukaddem","Fergu'l-Muahhar","Batnu'l-Hût"];
+const ESMA=[["Rahmân","رحمن"],["Rahîm","رحيم"],["Melik","ملك"],["Kuddûs","قدوس"],["Selâm","سلام"],["Mü'min","مؤمن"],["Müheymin","مهيمن"],["Azîz","عزيز"],["Cebbâr","جبار"],["Mütekebbir","متكبر"],["Hâlık","خالق"],["Bâri'","بارئ"],["Musavvir","مصور"],["Gaffâr","غفار"],["Kahhâr","قهار"],["Vehhâb","وهاب"],["Rezzâk","رزاق"],["Fettâh","فتاح"],["Alîm","عليم"],["Kâbız","قابض"],["Bâsıt","باسط"],["Hâfıd","خافض"],["Râfi'","رافع"],["Muizz","معز"],["Müzill","مذل"],["Semî'","سميع"],["Basîr","بصير"],["Hakem","حكم"],["Adl","عدل"],["Latîf","لطيف"],["Habîr","خبير"],["Halîm","حليم"],["Azîm","عظيم"],["Gafûr","غفور"],["Şekûr","شكور"],["Aliyy","علي"],["Kebîr","كبير"],["Hafîz","حفيظ"],["Mukît","مقيت"],["Hasîb","حسيب"],["Celîl","جليل"],["Kerîm","كريم"],["Rakîb","رقيب"],["Mucîb","مجيب"],["Vâsi'","واسع"],["Hakîm","حكيم"],["Vedûd","ودود"],["Mecîd","مجيد"],["Bâis","باعث"],["Şehîd","شهيد"],["Hakk","حق"],["Vekîl","وكيل"],["Kaviyy","قوي"],["Metîn","متين"],["Veliyy","ولي"],["Hamîd","حميد"],["Muhsî","محصي"],["Mübdi'","مبدئ"],["Muîd","معيد"],["Muhyî","محيي"],["Mümît","مميت"],["Hayy","حي"],["Kayyûm","قيوم"],["Vâcid","واجد"],["Mâcid","ماجد"],["Vâhid","واحد"],["Samed","صمد"],["Kâdir","قادر"],["Muktedir","مقتدر"],["Mukaddim","مقدم"],["Muahhir","مؤخر"],["Evvel","اول"],["Âhir","آخر"],["Zâhir","ظاهر"],["Bâtın","باطن"],["Vâlî","والي"],["Müteâlî","متعالي"],["Berr","بر"],["Tevvâb","تواب"],["Müntakim","منتقم"],["Afüvv","عفو"],["Raûf","رؤوف"],["Mâlikü'l-Mülk","مالك الملك"],["Zü'l-Celâli ve'l-İkrâm","ذو الجلال والاكرام"],["Muksit","مقسط"],["Câmi'","جامع"],["Ganiyy","غني"],["Muğnî","مغني"],["Mâni'","مانع"],["Dârr","ضار"],["Nâfi'","نافع"],["Nûr","نور"],["Hâdî","هادي"],["Bedî'","بديع"],["Bâkî","باقي"],["Vâris","وارث"],["Reşîd","رشيد"],["Sabûr","صبور"]];
+
+// Şehirler: [ad, enlem, boylam, saat dilimi]
+const IST="Europe/Istanbul";
+const CITIES=[["Adana",37.0,35.32],["Adıyaman",37.76,38.28],["Afyonkarahisar",38.76,30.54],["Ağrı",39.72,43.05],["Aksaray",38.37,34.03],["Amasya",40.65,35.83],["Ankara",39.93,32.86],["Antalya",36.89,30.71],["Ardahan",41.11,42.7],["Artvin",41.18,41.82],["Aydın",37.85,27.85],["Balıkesir",39.65,27.88],["Bartın",41.63,32.34],["Batman",37.88,41.13],["Bayburt",40.26,40.23],["Bilecik",40.14,29.98],["Bingöl",38.88,40.5],["Bitlis",38.4,42.11],["Bolu",40.74,31.61],["Burdur",37.72,30.29],["Bursa",40.19,29.06],["Çanakkale",40.15,26.41],["Çankırı",40.6,33.62],["Çorum",40.55,34.95],["Denizli",37.78,29.09],["Diyarbakır",37.91,40.24],["Düzce",40.84,31.16],["Edirne",41.68,26.56],["Elazığ",38.68,39.22],["Erzincan",39.75,39.49],["Erzurum",39.9,41.27],["Eskişehir",39.78,30.52],["Gaziantep",37.07,37.38],["Giresun",40.91,38.39],["Gümüşhane",40.46,39.48],["Hakkari",37.58,43.74],["Hatay",36.2,36.16],["Iğdır",39.92,44.04],["Isparta",37.76,30.55],["İstanbul",41.01,28.98],["İzmir",38.42,27.14],["Kahramanmaraş",37.58,36.94],["Karabük",41.2,32.62],["Karaman",37.18,33.22],["Kars",40.6,43.1],["Kastamonu",41.39,33.78],["Kayseri",38.73,35.49],["Kilis",36.72,37.12],["Kırıkkale",39.85,33.51],["Kırklareli",41.73,27.22],["Kırşehir",39.15,34.16],["Kocaeli",40.77,29.92],["Konya",37.87,32.48],["Kütahya",39.42,29.98],["Malatya",38.35,38.31],["Manisa",38.61,27.43],["Mardin",37.31,40.74],["Mersin",36.8,34.64],["Muğla",37.22,28.36],["Muş",38.74,41.49],["Nevşehir",38.62,34.71],["Niğde",37.97,34.68],["Ordu",40.98,37.88],["Osmaniye",37.07,36.25],["Rize",41.03,40.52],["Sakarya",40.78,30.4],["Samsun",41.29,36.33],["Siirt",37.93,41.94],["Sinop",42.03,35.15],["Sivas",39.75,37.02],["Şanlıurfa",37.17,38.79],["Şırnak",37.52,42.46],["Tekirdağ",40.98,27.51],["Tokat",40.31,36.55],["Trabzon",41.0,39.72],["Tunceli",39.11,39.55],["Uşak",38.68,29.41],["Van",38.49,43.38],["Yalova",40.65,29.27],["Yozgat",39.82,34.81],["Zonguldak",41.46,31.79]].map(c=>[c[0],c[1],c[2],IST]).concat([
+["Lefkoşa",35.19,33.36,"Asia/Nicosia"],["Bakü",40.41,49.87,"Asia/Baku"],["Tiflis",41.72,44.79,"Asia/Tbilisi"],["Üsküp",42.0,21.43,"Europe/Skopje"],["Saraybosna",43.86,18.41,"Europe/Sarajevo"],["Priştine",42.66,21.17,"Europe/Belgrade"],["Sofya",42.7,23.32,"Europe/Sofia"],["Berlin",52.52,13.4,"Europe/Berlin"],["Hamburg",53.55,9.99,"Europe/Berlin"],["Köln",50.94,6.96,"Europe/Berlin"],["Münih",48.14,11.58,"Europe/Berlin"],["Frankfurt",50.11,8.68,"Europe/Berlin"],["Stuttgart",48.78,9.18,"Europe/Berlin"],["Düsseldorf",51.23,6.78,"Europe/Berlin"],["Viyana",48.21,16.37,"Europe/Vienna"],["Zürih",47.38,8.54,"Europe/Zurich"],["Amsterdam",52.37,4.9,"Europe/Amsterdam"],["Rotterdam",51.92,4.48,"Europe/Amsterdam"],["Brüksel",50.85,4.35,"Europe/Brussels"],["Paris",48.86,2.35,"Europe/Paris"],["Londra",51.51,-0.13,"Europe/London"],["Stockholm",59.33,18.07,"Europe/Stockholm"],["Kopenhag",55.68,12.57,"Europe/Copenhagen"],["New York",40.71,-74.0,"America/New_York"],["Mekke",21.42,39.83,"Asia/Riyadh"],["Medine",24.47,39.61,"Asia/Riyadh"],["Kahire",30.04,31.24,"Africa/Cairo"],["Şam",33.51,36.29,"Asia/Damascus"],["Bağdat",33.31,44.36,"Asia/Baghdad"],["Tahran",35.69,51.39,"Asia/Tehran"]]);
+
+/* ---------- Yardımcılar ---------- */
+const $=id=>document.getElementById(id);
+const norm=s=>s.toLocaleLowerCase("tr").normalize("NFC").replace(/[^a-zçğıöşüâîû]/g,"");
+const keyCity=s=>s.toLocaleLowerCase("tr").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/ı/g,"i").replace(/[^a-z]/g,"");
+function trToArabic(s){ return norm(s).split("").map(ch=>TR[ch]||"").join(""); }
+function analyze(arab){
+  const letters=[]; for(const ch of arab){ const b=BASE[ch]||ch; if(VAL[b]) letters.push({g:ch,b}); }
+  const total=letters.reduce((a,l)=>a+VAL[l.b],0);
+  const el={Ateş:0,Hava:0,Su:0,Toprak:0}; letters.forEach(l=>el[ELEM[l.b]]++);
+  const freq={}; letters.forEach(l=>freq[l.b]=(freq[l.b]||0)+1);
+  const dom=Object.entries(freq).sort((a,b)=>b[1]-a[1]||VAL[b[0]]-VAL[a[0]]).slice(0,3).map(([c,n])=>`${NAME[c]} ×${n} (${VAL[c]}, ${ELEM[c]})`);
+  return {arab:letters.map(l=>l.g).join(""),letters,total,el,dom,first:letters[0],last:letters[letters.length-1]};
+}
+const ESMA_V=ESMA.map(([tr,ar])=>({tr,ar,v:analyze(ar).total}));
+function nearestEsma(n,k){ return ESMA_V.slice().sort((a,b)=>Math.abs(a.v-n)-Math.abs(b.v-n)||a.v-b.v).slice(0,k); }
+const r=d=>d*Math.PI/180, deg=x=>x*180/Math.PI, n360=x=>((x%360)+360)%360;
+function tzOffsetMs(ts,tz){
+  const p=new Intl.DateTimeFormat("en-US",{timeZone:tz,hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"}).formatToParts(new Date(ts));
+  const o={}; p.forEach(x=>o[x.type]=+x.value);
+  return Date.UTC(o.year,o.month-1,o.day,o.hour%24,o.minute,o.second)-ts;
+}
+function zonedToUtc(y,mo,d,h,mi,tz){ const wall=Date.UTC(y,mo-1,d,h,mi); let t=wall; for(let i=0;i<3;i++) t=wall-tzOffsetMs(t,tz); return t; }
+const JD=ts=>ts/86400000+2440587.5;
+function sunLon(d){ const g=r(357.529+0.98560028*d), q=280.459+0.98564736*d; return n360(q+1.915*Math.sin(g)+0.020*Math.sin(2*g)); }
+function moonLon(d){ const L=218.316+13.176396*d, M=r(134.963+13.064993*d), D=r(297.850+12.190749*d), Ms=r(357.529+0.98560028*d), F=r(93.272+13.229350*d);
+  return n360(L+6.289*Math.sin(M)+1.274*Math.sin(2*D-M)+0.658*Math.sin(2*D)+0.214*Math.sin(2*M)-0.186*Math.sin(Ms)-0.114*Math.sin(2*F)); }
+function ascendant(d,lat,lon){ const ramc=r(n360(280.46061837+360.98564736629*d+lon)), e=r(23.439), f=r(lat);
+  return n360(deg(Math.atan2(Math.cos(ramc),-(Math.sin(ramc)*Math.cos(e)+Math.tan(f)*Math.sin(e))))); }
+function sunTimes(y,mo,dd,lat,lon){ // UTC ms
+  const base=Date.UTC(y,mo-1,dd), d=JD(base+12*3600e3-lon/15*3600e3)-2451545;
+  const lam=r(sunLon(d)), dec=Math.asin(Math.sin(r(23.439))*Math.sin(lam));
+  const N=Math.floor((base-Date.UTC(y,0,0))/86400000), B=r(360/365*(N-81));
+  const eot=9.87*Math.sin(2*B)-7.53*Math.cos(B)-1.5*Math.sin(B);
+  const noon=12-lon/15-eot/60;
+  let c=(Math.sin(r(-0.833))-Math.sin(r(lat))*Math.sin(dec))/(Math.cos(r(lat))*Math.cos(dec)); c=Math.max(-1,Math.min(1,c));
+  const w=deg(Math.acos(c))/15;
+  return {rise:base+(noon-w)*3600e3,set:base+(noon+w)*3600e3};
+}
+const signOf=lon=>BURC[Math.floor(lon/30)];
+const degIn=lon=>`${Math.floor(lon%30)}°`;
+function fmtClock(ts,tz){ return new Intl.DateTimeFormat("tr-TR",{timeZone:tz,hour:"2-digit",minute:"2-digit"}).format(new Date(ts)); }
+function moonPhase(e){ e=n360(e); if(e<12) return "İçtimâ (ay karanlığı)"; if(e<85) return "Hilâl, büyüyen ay"; if(e<100) return "İlk terbî' (yarım ay)"; if(e<168) return "Büyüyen ay, bedre giderken"; if(e<192) return "Bedr (dolunay)"; if(e<265) return "Küçülen ay"; if(e<280) return "Son terbî' (yarım ay)"; if(e<348) return "Hilâl, küçülen ay"; return "İçtimâ (ay karanlığı)"; }
+
+/* ---------- Hesap ---------- */
+function compute(inp){
+  const nm=analyze(trToArabic(inp.ad));
+  const an=analyze(trToArabic(inp.anne));
+  const top=nm.total+an.total;
+  const k12=((top-1)%12)+1, k7=((top-1)%7)+1, k4=top%4;
+  const isimBurc=BURC[k12-1], isimYildiz=CHALDEAN[k7-1], isimUnsur=["Su","Ateş","Toprak","Hava"][k4];
+  const ck=keyCity(inp.yer); let city=CITIES.find(c=>keyCity(c[0])===ck); const cityKnown=!!city;
+  if(!city) city=["Ankara (yaklaşık)",39.93,32.86,IST];
+  const [y,mo,d]=inp.tarih.split("-").map(Number), [hh,mi]=inp.saat.split(":").map(Number);
+  const tz=city[3], t=zonedToUtc(y,mo,d,hh,mi,tz), dd=JD(t)-2451545;
+  const sun=sunLon(dd), moon=moonLon(dd), asc=ascendant(dd,city[1],city[2]);
+  const node=n360(125.04452-0.0529538083*dd);
+  // gezegen saati
+  const st=sunTimes(y,mo,d,city[1],city[2]);
+  const wd=new Date(Date.UTC(y,mo-1,d)).getUTCDay();
+  let dayIdx, hourIdx, gece=false, start, len;
+  if(t<st.rise){ const p=new Date(Date.UTC(y,mo-1,d-1)), sp=sunTimes(p.getUTCFullYear(),p.getUTCMonth()+1,p.getUTCDate(),city[1],city[2]);
+    dayIdx=(wd+6)%7; len=(st.rise-sp.set)/12; hourIdx=12+Math.min(11,Math.floor((t-sp.set)/len)); gece=true; }
+  else if(t<st.set){ dayIdx=wd; len=(st.set-st.rise)/12; hourIdx=Math.floor((t-st.rise)/len); }
+  else { const nx=new Date(Date.UTC(y,mo-1,d+1)), sn=sunTimes(nx.getUTCFullYear(),nx.getUTCMonth()+1,nx.getUTCDate(),city[1],city[2]);
+    dayIdx=wd; len=(sn.rise-st.set)/12; hourIdx=12+Math.min(11,Math.floor((t-st.set)/len)); gece=true; }
+  const dayRuler=DAY_RULER[dayIdx];
+  const hourRuler=CHALDEAN[(CHALDEAN.indexOf(dayRuler)+hourIdx)%7];
+  const geceAdi=gece?`${GUN[(dayIdx+1)%7]} gecesi (${GUN[dayIdx]} akşamından sonraki gece)`:`${GUN[dayIdx]} günü, gündüz`;
+  let hicri=""; try{ hicri=new Intl.DateTimeFormat("tr-TR-u-ca-islamic-umalqura",{day:"numeric",month:"long",year:"numeric"}).format(new Date(t)); }catch(e){}
+  const el={Ateş:0,Hava:0,Su:0,Toprak:0}; for(const k in el) el[k]=nm.el[k]+an.el[k];
+  return {inp,nm,an,top,isimBurc,isimYildiz,isimUnsur,k12,k7,city,cityKnown,tz,sun,moon,asc,node,dayRuler,hourRuler,hourIdx,gece,geceAdi,hicri,el,
+    sunSign:signOf(sun),moonSign:signOf(moon),ascSign:signOf(asc),menzil:MENAZIL[Math.floor(moon/(360/28))],menzilNo:Math.floor(moon/(360/28))+1,
+    phase:moonPhase(moon-sun),rise:fmtClock(st.rise,tz),set:fmtClock(st.set,tz),
+    esmaAd:nearestEsma(nm.total,3),esmaTop:nearestEsma(top,2)};
+}
+const P=k=>`${PLANETS[k].ad} (${PLANETS[k].tr})`;
+const B=b=>`${b[0]} (${b[1]}), ${b[2]} burcu, sâhibi ${PLANETS[b[3]].ad}`;
+const elStr=e=>Object.entries(e).map(([k,v])=>`${k} ${v}`).join(", ");
+
+/* ---------- Harf taşları ---------- */
+const EL_VAR={Ateş:"var(--el-ates)",Hava:"var(--el-hava)",Su:"var(--el-su)",Toprak:"var(--el-toprak)"};
+function tilesOf(name){ const out=[]; for(const ch of norm(name)){ const a=TR[ch]; if(!a) continue; for(const g of a){ const b=BASE[g]||g; out.push({tr:ch,ad:NAME[g]||NAME[b],v:VAL[b],el:ELEM[b]}); } } return out; }
+const letterNames=a=>a.letters.map(l=>NAME[l.g]||NAME[l.b]).join(", ");
+function el(tag,cls,txt){ const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
+function nameRow(title,who,name,total){
+  const box=el("div","namerow"); const h=el("h3",null,title); h.appendChild(el("em",null,who)); box.appendChild(h);
+  const t=el("div","tiles");
+  tilesOf(name).forEach(x=>{ const d=el("div","tilel"); d.style.setProperty("--c",EL_VAR[x.el]); d.title=`${x.ad}, ${x.el}`;
+    d.appendChild(el("span","t",x.tr.toLocaleUpperCase("tr"))); d.appendChild(el("span","n",x.ad)); d.appendChild(el("span","v",String(x.v))); t.appendChild(d); });
+  const s=el("div","sum"); s.appendChild(document.createTextNode("= "+total)); s.appendChild(el("small",null,"ebced")); t.appendChild(s);
+  box.appendChild(t); return box;
+}
+
+/* ---------- Doğum gökyüzü çarkı ---------- */
+const NS="http://www.w3.org/2000/svg";
+function sv(tag,attrs,parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+const pt=(lon,rad)=>{ const a=r(180+lon); return [rad*Math.cos(a),-rad*Math.sin(a)]; };
+const SECTOR_FILL={Ateş:"rgba(226,90,72,.30)",Hava:"rgba(240,190,74,.22)",Su:"rgba(80,170,240,.22)",Toprak:"rgba(201,156,102,.24)"};
+const RO=180, RI=134;
+function drawWheel(c){
+  const g=$("wheel"); g.textContent="";
+  sv("circle",{r:RO,fill:"rgba(8,20,64,.55)",stroke:"rgba(255,255,255,.45)","stroke-width":1.2},g);
+  BURC.forEach((b,i)=>{ const a0=i*30,a1=a0+30, [x0,y0]=pt(a0,RO),[x1,y1]=pt(a1,RO),[x2,y2]=pt(a1,RI),[x3,y3]=pt(a0,RI);
+    sv("path",{d:`M${x0} ${y0}A${RO} ${RO} 0 0 0 ${x1} ${y1}L${x2} ${y2}A${RI} ${RI} 0 0 1 ${x3} ${y3}Z`,fill:SECTOR_FILL[b[2]],stroke:"rgba(255,255,255,.35)","stroke-width":.8},g);
+    const [tx,ty]=pt(a0+15,(RO+RI)/2); const lg=sv("g",{class:"lbl"},g);
+    const t=sv("text",{x:tx,y:ty+4.5,"text-anchor":"middle","font-size":13,fill:"#F1F5FC","font-family":"Literata, Georgia, serif"},lg); t.textContent=b[1]; });
+  for(let d=0; d<360; d+=5){ const [a,b2]=pt(d,RI), [c2,d2]=pt(d,RI-(d%30===0?10:d%10===0?6:3)); sv("line",{x1:a,y1:b2,x2:c2,y2:d2,stroke:"rgba(255,255,255,.45)","stroke-width":.8},g); }
+  sv("circle",{r:RI,fill:"none",stroke:"rgba(255,255,255,.45)","stroke-width":1},g);
+  sv("circle",{r:46,fill:"none",stroke:"rgba(255,255,255,.18)","stroke-width":1,"stroke-dasharray":"2 4"},g);
+  // 8 köşeli yıldız ortada
+  const st=sv("g",{fill:"none",stroke:"rgba(227,167,42,.75)","stroke-width":1.2},g);
+  sv("rect",{x:-18,y:-18,width:36,height:36},st); sv("rect",{x:-18,y:-18,width:36,height:36,transform:"rotate(45)"},st);
+  // Güneş
+  const [sx,sy]=pt(c.sun,104); sv("line",{x1:0,y1:0,x2:sx,y2:sy,stroke:"rgba(240,188,74,.5)","stroke-width":1},g);
+  sv("circle",{cx:sx,cy:sy,r:13,fill:"#F0BC4A",stroke:"#FFE9B0","stroke-width":2},g);
+  const sl=sv("g",{class:"lbl"},g); const s1=sv("text",{x:sx,y:sy+30,"text-anchor":"middle","font-size":12.5,fill:"#FFE9B0","font-family":"Literata, Georgia, serif"},sl); s1.textContent="Güneş";
+  // Ay
+  const [mx,my]=pt(c.moon,74); sv("line",{x1:0,y1:0,x2:mx,y2:my,stroke:"rgba(241,245,252,.4)","stroke-width":1},g);
+  sv("circle",{cx:mx,cy:my,r:10,fill:"#F1F5FC"},g); sv("circle",{cx:mx+4.5,cy:my-2.5,r:8.5,fill:"#1A3381"},g);
+  const ml=sv("g",{class:"lbl"},g); const m1=sv("text",{x:mx,y:my+25,"text-anchor":"middle","font-size":12.5,fill:"#F1F5FC","font-family":"Literata, Georgia, serif"},ml); m1.textContent="Ay";
+  // Yükselen (sabit, solda)
+  const am=$("ascMark"); am.textContent="";
+  sv("line",{x1:-RI,y1:0,x2:RI,y2:0,stroke:"rgba(255,255,255,.22)","stroke-width":1,"stroke-dasharray":"3 5"},am);
+  sv("path",{d:`M${-RO-14} -9 L${-RO+2} 0 L${-RO-14} 9Z`,fill:"#E0554A"},am);
+  // Yerine dönüş
+  const svg=$("wheelSvg"); requestAnimationFrame(()=>requestAnimationFrame(()=>svg.style.setProperty("--rot",`${c.asc.toFixed(2)}deg`)));
+  const cap=$("skycap"); cap.textContent="";
+  [["#F0BC4A","Güneş",c.sunSign,c.sun],["#F1F5FC","Ay",c.moonSign,c.moon],["#E0554A","Yükselen",c.ascSign,c.asc]].forEach(([col,k,s,lon])=>{
+    const li=el("li"); const d=el("span","dot"); d.style.background=col; li.appendChild(d); li.appendChild(document.createTextNode(k+": ")); li.appendChild(el("b",null,`${s[1]} ${degIn(lon)}`)); cap.appendChild(li); });
+}
+
+/* ---------- Cetvel ---------- */
+function fact(k,v,n,extra){ const d=el("div","fact"); d.appendChild(el("div","k",k)); d.appendChild(el("div","v",v)); if(extra) d.appendChild(extra); if(n) d.appendChild(el("div","n",n)); return d; }
+function elemBar(e){ const total=Object.values(e).reduce((a,b)=>a+b,0)||1; const b=el("div","bar"); b.setAttribute("aria-hidden","true");
+  ["Ateş","Hava","Su","Toprak"].forEach(k=>{ if(!e[k]) return; const i=el("i"); i.style.setProperty("--c",EL_VAR[k]); i.style.flex=String(e[k]/total); b.appendChild(i); }); return b; }
+function renderCetvel(c){
+  const nb=$("names"); nb.textContent="";
+  nb.appendChild(nameRow(c.inp.ad,"senin adın",c.inp.ad,c.nm.total));
+  nb.appendChild(nameRow(c.inp.anne,"annenin adı",c.inp.anne,c.an.total));
+  const box=$("cetvel"); box.textContent="";
+  box.appendChild(fact("İsim ve anne toplamı",String(c.top),`12'ye bölümde kalan ${c.k12}, isim burcu ${c.isimBurc[0]} (${c.isimBurc[1]}). 7'ye bölümde kalan ${c.k7}, isim yıldızı ${PLANETS[c.isimYildiz].ad}. Unsuru ${c.isimUnsur}.`));
+  const dom=c.nm.dom.map(s=>s.replace(/ \(.*\)/,"")).join(", ");
+  box.appendChild(fact("Harflerin tabiatı",`Ateş ${c.el.Ateş}, Hava ${c.el.Hava}, Su ${c.el.Su}, Toprak ${c.el.Toprak}`,`Adında baskın harfler: ${dom||"yok"}`,elemBar(c.el)));
+  box.appendChild(fact("Güneş burcu",`${c.sunSign[0]} (${c.sunSign[1]}) ${degIn(c.sun)}`,`${c.sunSign[2]} tabiatlı, sâhibi ${PLANETS[c.sunSign[3]].ad}`));
+  box.appendChild(fact("Tâli' (yükselen)",`${c.ascSign[0]} (${c.ascSign[1]}) ${degIn(c.asc)}`,"Doğum yeri ve saatine göre yaklaşık hesap"));
+  box.appendChild(fact("Ay'ın burcu ve menzili",`${c.moonSign[0]} (${c.moonSign[1]}), ${c.menzil}`,`${c.menzilNo}. menzil. ${c.phase}`));
+  box.appendChild(fact("Doğduğun saatin yıldızı",`${P(c.hourRuler)} saati`,`${c.geceAdi}. Günün yıldızı ${PLANETS[c.dayRuler].ad}, ${c.gece?"gecenin":"gündüzün"} ${c.hourIdx%12+1}. saati. Gün doğumu ${c.rise}, batımı ${c.set}.`));
+  box.appendChild(fact("Kadersel düğümler",`Re's ${signOf(c.node)[1]}, Zeneb ${signOf(n360(c.node+180))[1]}`,`Ukde-i Re's ${signOf(c.node)[0]}, Ukde-i Zeneb ${signOf(n360(c.node+180))[0]} burcunda`));
+  box.appendChild(fact("İsme yakın esmâlar",c.esmaAd.map(x=>`Yâ ${x.tr}`).join(", "),c.esmaAd.map(x=>`${x.tr} ${x.v}`).join(", ")+`. İsim ve anne toplamına yakın: ${c.esmaTop.map(x=>`${x.tr} ${x.v}`).join(", ")}.`));
+  if(c.hicri) box.appendChild(fact("Hicrî doğum tarihi",c.hicri,"Doğum gününün hicrî takvimdeki karşılığı"));
+  if(!c.cityKnown) box.appendChild(fact("Doğum yeri","Listede bulunamadı","Saat hesabı Türkiye saatine ve Ankara'ya göre yaklaşık yapıldı. Listeden bir şehir seçersen daha doğru olur."));
+  drawWheel(c);
+}
+function renderTable(){
+  const tb=document.querySelector("#harfTablo tbody");
+  TR_ROWS.forEach(([tr,ar])=>{ const b=BASE[ar]||ar; const row=document.createElement("tr");
+    [tr,NAME[ar]||NAME[b],String(VAL[b])+(ar!==b?` (${NAME[b]} gibi)`:""),ELEM[b]].forEach(v=>row.appendChild(el("td",null,v)));
+    tb.appendChild(row); });
+}
+
+/* ---------- Basit metin biçimlendirme ---------- */
+const stripAr=s=>s.replace(/[؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]+/g,"").replace(/\(\s*\)/g,"").replace(/ {2,}/g," ");
+function inline(el,txt){ txt=stripAr(txt); txt.split(/(\*\*[^*]+\*\*)/g).forEach(s=>{ if(/^\*\*[^*]+\*\*$/.test(s)){ const b=document.createElement("strong"); b.textContent=s.slice(2,-2); el.appendChild(b);} else if(s) el.appendChild(document.createTextNode(s.replace(/\*/g,""))); }); }
+function renderMd(el,text){
+  el.textContent=""; let ul=null;
+  text.split(/\n/).forEach(line=>{ const s=line.trim(); if(!s){ ul=null; return; }
+    let m;
+    if((m=s.match(/^#{2,4}\s+(.*)/))){ ul=null; const h=document.createElement("h4"); h.textContent=stripAr(m[1].replace(/\*/g,"")); el.appendChild(h); }
+    else if((m=s.match(/^[-•*]\s+(.*)/))){ if(!ul){ ul=document.createElement("ul"); el.appendChild(ul);} const li=document.createElement("li"); inline(li,m[1]); ul.appendChild(li); }
+    else { ul=null; const p=document.createElement("p"); inline(p,s); el.appendChild(p); } });
+}
+
+/* ---------- Akış ---------- */
+const STAR=`<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor"><rect x="5" y="5" width="14" height="14"/><rect x="5" y="5" width="14" height="14" transform="rotate(45 12 12)"/></g><circle cx="12" cy="12" r="3" fill="var(--paper)"/></svg>`;
+let current=null;
+function readForm(){ return {ad:$("ad").value.trim(),anne:$("anne").value.trim(),tarih:$("tarih").value,saat:$("saat").value,yer:$("yer").value.trim()}; }
+function setStatus(t,err){ const s=$("status"); s.textContent=t; s.className=err?"status err":"status"; }
+let lastText="";
+function run(c){
+  const S=FAL.oku(c,{BURC,NAME,esmaVal:n=>{ const x=ESMA_V.find(e=>e.tr===n); return x?x.v:0; }});
+  lastText=FAL.metin(c,S);
+  const box=$("yorum"); box.textContent="";
+  S.forEach(sec=>{ const ch=el("div","chapter"); const h=el("h3"); h.innerHTML=STAR; h.appendChild(document.createTextNode(sec.title)); ch.appendChild(h);
+    const d=el("div","reading live");
+    sec.subs.forEach(sub=>{ d.appendChild(el("h4",null,sub.h)); sub.p.forEach(t=>d.appendChild(el("p",null,t))); });
+    ch.appendChild(d); box.appendChild(ch); });
+  $("copyRow").hidden=false; $("copyAll").textContent="Yorumu kopyala";
+  setStatus("Yorum hazır. Aşağıda okuyabilirsin.");
+  $("yorumBox").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+}
+$("copyAll").addEventListener("click",()=>{ if(!lastText) return; const b=$("copyAll");
+  navigator.clipboard.writeText(lastText).then(()=>b.textContent="Kopyalandı",()=>b.textContent="Kopyalanamadı"); });
+$("f").addEventListener("submit",ev=>{ ev.preventDefault();
+  const inp=readForm();
+  const eksik=[["ad","adın"],["anne","annenin adı"],["tarih","doğum tarihi"],["saat","doğum saati"],["yer","doğum yeri"]].filter(([k])=>!inp[k]);
+  if(eksik.length){ setStatus(`Eksik bilgi: ${eksik.map(x=>x[1]).join(", ")}. Hepsini doldurup tekrar bas.`,true); $(eksik[0][0]).focus(); return; }
+  if(!trToArabic(inp.ad)){ setStatus("Ad yalnızca harflerden oluşmalı.",true); $("ad").focus(); return; }
+  try{ current=compute(inp); }catch(e){ setStatus("Hesap yapılamadı. Tarih ve saati kontrol et.",true); return; }
+  $("ornekTag").hidden=true; renderCetvel(current); run(current); });
+// başlangıç
+const dl=$("sehirler"); CITIES.forEach(c=>{ const o=document.createElement("option"); o.value=c[0]; dl.appendChild(o); });
+renderTable();
+try{ current=compute(readForm()); renderCetvel(current); }catch(e){ console.error(e); }
+})();
+</script>
+</body>
+</html>
