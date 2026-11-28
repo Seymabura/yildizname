@@ -150,3 +150,64 @@ K.CIFT = {
  "Musteri|Zuhal":["Sabır ile bereket el ele verir; geç gelen kısmet kalıcı olur.","Bolluk ile darlık arasında gidip gelirsin; ümit ile korku birbirini kovalar.","Hayatında büyük bir devrin kapısı açılır; sabır bereketi doğurur."]
 };
 })(window.KITAP);
+(function(K){
+"use strict";
+// Her yıldızın girdiği hâneye yaptığı iş
+K.YILDIZ_FIIL = {
+ Zuhal:"girdiği hânenin işlerini geciktirir, ağırlaştırır; ama sabırla bekleyene orada kalıcı bir temel bırakır",
+ Musteri:"girdiği hâneye bereket, genişlik ve himaye getirir; o hânenin kapısı kolay açılır",
+ Mirrih:"girdiği hâneye ateş, hız ve çekişme getirir; orada cesaret ister, öfke sakınılır",
+ Sems:"girdiği hâneyi aydınlatır; o hânenin işleri seni göz önüne çıkarır, izzet yahut gurur oradan doğar",
+ Zuhre:"girdiği hâneye muhabbet, zarafet ve tatlılık katar; o hânede insanlar sana yumuşak davranır",
+ Utarid:"girdiği hâneye söz, hesap ve hareket getirir; o hânenin işleri akılla ve konuşarak yürür",
+ Kamer:"girdiği hâneye his ve değişkenlik getirir; o hânenin işleri Ay gibi bir artar bir eksilir"
+};
+// Sevinç hâneleri (ferah): yıldızın kendini en rahat hissettiği hâne
+K.SEVINC = {Utarid:1, Kamer:3, Zuhre:5, Mirrih:6, Sems:9, Musteri:11, Zuhal:12};
+K.SEVINC_METIN = "sevinç hânesindedir, yani kadîmlerin ferah dediği yerdedir; yıldız burada gönül hoşluğuyla çalışır ve hayrı artar";
+// Gündüz ve gece haritası (hayz)
+K.HAYZ = {
+ gece:"Gece doğduğundan haritan gece haritasıdır. Gece haritasında hükmün nuru Kamer'dir; sa'd yıldızların en hayırlısı Zühre, nahsların en hafifi Mirrîh olur. Zühal ise gece haritasında yabancıdır ve yükü daha ağır gelir.",
+ gunduz:"Gündüz doğduğundan haritan gündüz haritasıdır. Gündüz haritasında hükmün nuru Şems'tir; sa'd yıldızların en hayırlısı Müşterî, nahsların en hafifi Zühal olur. Mirrîh ise gündüz haritasında yabancıdır ve kızgınlığı daha keskin gelir."
+};
+// Fidâr (ömür devirleri) — her devrin hükmü
+K.FIDAR_METIN = {
+ Sems:"Şems devri izzet, görünürlük ve baba tarafının işleriyle geçer; insan kendini ispat etmek ister.",
+ Zuhre:"Zühre devri muhabbet, süs, sanat ve gönül işleriyle geçer; sevgi ve dostluk kapıları açılır.",
+ Utarid:"Utârid devri tahsil, söz, yazı ve ticaret devridir; akıl keskinleşir, yollar çoğalır.",
+ Kamer:"Kamer devri çocukluk, ana kucağı ve hislerin devridir; ruhun temeli bu yıllarda atılır.",
+ Zuhal:"Zühal devri sabır, mesuliyet ve yalnızlık devridir; insan erken olgunlaşır, ağır ama sağlam dersler alır.",
+ Musteri:"Müşterî devri bereket, ilim, inanç ve himaye devridir; hayırlı kapılar açılır, büyükler yardım eder.",
+ Mirrih:"Mirrîh devri mücadele, cesaret ve hızlı kararların devridir; atılan adımlar büyük olur, kavgadan sakınmak gerekir.",
+ Res:"Re's devri kaderin yeni bir kapıya çektiği kısa devirdir; beklenmedik fırsatlar gelir.",
+ Zeneb:"Zeneb devri eski hesapların kapandığı kısa devirdir; geride bırakılacak şeyler ayrılır."
+};
+// İntihâ: senenin açtığı hâne (yaş tamamlandıkça bir hâne ilerler)
+K.INTIHA_METIN = ["",
+ "Bu sene intihâ tâli'ine düşmüştür: yeni bir başlangıç, bedenine ve kendine dönme senesidir.",
+ "Bu sene intihâ mal hânene düşmüştür: kazanç, harcama ve emeğin karşılığı senenin işidir.",
+ "Bu sene intihâ söz ve kardeşler hânene düşmüştür: tahsil, yazı, yakın yolculuk ve kardeş meseleleri öne çıkar.",
+ "Bu sene intihâ yuva hânene düşmüştür: ev, aile, taşınma ve köklerle ilgili işler senenin gündemidir.",
+ "Bu sene intihâ gönül ve evlât hânene düşmüştür: muhabbet, eğlence ve sevinç senesidir.",
+ "Bu sene intihâ hizmet ve sıhhat hânene düşmüştür: çalışmak, düzen kurmak ve bedene dikkat senesidir.",
+ "Bu sene intihâ izdivaç hânene düşmüştür: nikâh, ortaklık ve karşına çıkan insanlar senenin mihveridir.",
+ "Bu sene intihâ gizli işler hânene düşmüştür: içsel dönüşüm, borç-miras ve sırların senesidir.",
+ "Bu sene intihâ ilim ve uzak yol hânene düşmüştür: okumak, seyahat ve inanç senesidir.",
+ "Bu sene intihâ mevki hânene düşmüştür: iş, itibar ve hayatının yönünü belirleyen kararlar senesidir.",
+ "Bu sene intihâ dostlar hânene düşmüştür: yeni dostluklar, ümitler ve hayırlı yardımlar senesidir.",
+ "Bu sene intihâ gizli sıkıntılar hânene düşmüştür: perde arkası, yalnızlık ve hazırlık senesidir; görünmeyen bir el seni korur."];
+// Sehm-i Saâdet: kısmetin geldiği hâne
+K.SEHM_HANE = ["",
+ "Kısmetin kendi elinde ve kendi çehrendedir; kendi gayretinle, kendi adınla gelir.",
+ "Kısmetin doğrudan mala ve kazanca bağlıdır; emeğinin karşılığını görürsün.",
+ "Kısmetin söz, kalem, kardeşler ve yakın yolculuklar üzerinden gelir.",
+ "Kısmetin evden, aileden, topraktan ve miras kalan yerden gelir.",
+ "Kısmetin gönül işlerinden, sanattan ve evlâtlardan gelir.",
+ "Kısmetin hizmetten, gündelik emekten ve şifa işlerinden gelir; çalıştıkça açılır.",
+ "Kısmetin eşinden, ortaklarından ve bir başkasıyla kurduğun bağdan gelir.",
+ "Kısmetin başkasının malından, mirastan yahut gizli işlerden gelir.",
+ "Kısmetin ilimden, uzak yollardan ve gurbetten gelir.",
+ "Kısmetin mevkiden, sanatından ve büyüklerin kapısından gelir.",
+ "Kısmetin dostlardan ve hayırlı tanıdıklardan gelir; bir dostun eli rızkını açar.",
+ "Kısmetin perde arkasından, görünmeyen yollardan gelir; dua ve gizli sadaka anahtarıdır."];
+})(window.KITAP);

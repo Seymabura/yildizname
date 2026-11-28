@@ -629,7 +629,7 @@ const TABS=[
   {id:"is",t:"İş",title:"Meslek ve Ortaklık",src:"is",pick:[0,3,6],d:"Yatkın olduğun sanat, ortaklıkta dikkat edilecekler."},
   {id:"para",t:"Para",title:"Kazanç ve Rızık",src:"is",pick:[1,2,4,5,7],d:"Rızkın kapısı, para tutma, bolluk ve darlık devirleri."},
   {id:"harf",t:"Harfler ve yıldız",title:"İlm-i Hurûf ve Yıldızname",src:"hurif",pick:[0,1,2,3,4,5,12,13],d:"Ebced hesabın, harflerinin tabiatı, esmân."},
-  {id:"kismet",t:"Nazar ve kısmet",title:"Kader İzleri, Nazar ve Kısmet",src:"hurif",pick:[6,7,8,9,10,11,14],d:"Gezegen saati, düğümler, ruhsal yük, nazar ve kısmet."},
+  {id:"kismet",t:"Nazar ve kısmet",title:"Kader İzleri, Nazar ve Kısmet",src:"hurif",pick:[6,7,8,9,10,11,14,15,16,17],d:"Gezegen saati, düğümler, ruhsal yük, nazar ve kısmet."},
   {id:"cetvel",t:"Hesap cetveli",title:"Hesap Cetveli",src:null,d:""}
 ];
 function buildTabs(S){
@@ -714,7 +714,7 @@ function renderOzet(c,root){
   blok("es","Eşin",`${e(o.es.charAt(0).toLocaleUpperCase("tr")+o.es.slice(1))}. ${e(o.esHal)}`,"w");
   blok("cocuk","Evlât",`<b>${e(o.evlat)}</b>, ${e(o.evlatCins)}.${o.bes?" "+e(o.bes)+".":""}`);
   blok("is","Meslek",`${e(o.meslek)}.`);
-  blok("para","Rızık",`${e(o.rizik)}.`);
+  blok("para","Rızık",`${e(o.rizik)}.${o.sehm?" "+e(o.sehm):""}`);
   blok("kismet","Bu devir",`${e(o.devir)}. Kısmet: <b>${e(o.kismet)}</b>.`);
   blok("donum","Dönüm yaşları",e(o.donum),"w c-amber");
   blok("dikkat","Dikkat",e(o.dikkat));

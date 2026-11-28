@@ -77,6 +77,25 @@ function oku(c, ctx){
   const yer = k => G[k] && G[k].hane;
   const zuhal7 = yer("Zuhal")===7;
 
+  // ---- ileri usuller: hayz, Sehm-i Saâdet, intihâ, fidâr ----
+  const gece = !!c.gece;
+  const sehmLon = ((gece ? c.asc + c.sun - c.moon : c.asc + c.moon - c.sun) % 360 + 360) % 360;
+  const sehmBi = Math.floor(sehmLon/30), sehmHane = ((sehmBi - ascI + 12) % 12) + 1;
+  const sehmSahip = BURC[sehmBi][3], sehmSahipG = G[sehmSahip];
+  const dogumMs = Date.UTC(+c.inp.tarih.slice(0,4), +c.inp.tarih.slice(5,7)-1, +c.inp.tarih.slice(8,10));
+  const yasF = Math.max(0, (Date.now() - dogumMs) / (365.2425*864e5));
+  const tamYas = Math.floor(yasF);
+  const intihaHane = (tamYas % 12) + 1, intihaBi = hane(intihaHane), yilSahip = BURC[intihaBi][3], yilSahipG = G[yilSahip];
+  const FIDAR_SIRA = gece ? [["Kamer",9],["Zuhal",11],["Musteri",12],["Mirrih",7],["Sems",10],["Zuhre",8],["Utarid",13],["Res",3],["Zeneb",2]]
+                          : [["Sems",10],["Zuhre",8],["Utarid",13],["Kamer",9],["Zuhal",11],["Musteri",12],["Mirrih",7],["Res",3],["Zeneb",2]];
+  const fidar = (()=>{ let t=0; const out=[]; for(let tur=0; tur<2; tur++) for(const [k,y] of FIDAR_SIRA){ out.push({k,bas:t,son:t+y}); t+=y; } return out; })();
+  const fidarNow = fidar.find(f=>yasF>=f.bas && yasF<f.son) || fidar[0];
+  const KALDANI = ["Zuhal","Musteri","Mirrih","Sems","Zuhre","Utarid","Kamer"];
+  const fidarAlt = (()=>{ if(fidarNow.k==="Res"||fidarNow.k==="Zeneb") return null; const boy=(fidarNow.son-fidarNow.bas)/7; const i=Math.min(6,Math.floor((yasF-fidarNow.bas)/boy)); const k=KALDANI[(KALDANI.indexOf(fidarNow.k)+i)%7]; return {k,bas:fidarNow.bas+i*boy,son:fidarNow.bas+(i+1)*boy}; })();
+  const FAD = k => k==="Res"?"Re's":k==="Zeneb"?"Zeneb":PAD(k);
+  const yasYaz = x => { const y=Math.floor(x), a=Math.round((x-y)*12); return a===0||a===12 ? `${a===12?y+1:y} yaş` : `${y} yaş ${a} ay`; };
+  const sevinc = g => g.hane && K.SEVINC[g.k]===g.hane;
+
   // ---- hüküm terazisi: her hüküm, dayanaklarıyla birlikte tartılır ----
   const terazi = () => { const t={puan:0,gerekce:[]}; t.ekle=(kosul,p,why)=>{ if(kosul){ t.puan+=p; t.gerekce.push(why); } return t; }; return t; };
   const venus = G.Zuhre || {};
@@ -169,7 +188,8 @@ function oku(c, ctx){
    )},
    {h:"Kadersel Düğümler", p:P(
      `Ukdeteyn, yani Ay'ın yolunun Güneş'in yolunu kestiği iki düğüm, doğduğun ânda Re's için ${BURC[nodeI][0]} (${BURC[nodeI][1]}), Zeneb için ${BURC[zenebI][0]} (${BURC[zenebI][1]}) burcundaydı. Kadîm müneccimler Re's'i, yani ejderhanın başını, kaderin gittiği yön; Zeneb'i, yani kuyruğunu, ruhun geldiği ve geride bırakması gereken yer sayar.`,
-     K.BURC[nodeI].res, K.BURC[zenebI].zeneb
+     K.BURC[nodeI].res, K.BURC[zenebI].zeneb,
+     !saatYok && `Re's tâli'den ${SIRA[((nodeI-ascI+12)%12)+1]} hânede, yani ${K.HANE[((nodeI-ascI+12)%12)+1]} hânesindedir: kaderin seni bu işlere doğru çeker, büyümen bu kapıdandır. Zeneb ise ${SIRA[((zenebI-ascI+12)%12)+1]} hânede, yani ${K.HANE[((zenebI-ascI+12)%12)+1]} hânesindedir: bu işlerde ruhun zaten ustadır, ama orada takılı kalırsa yük olur.`
    )},
    {h:"Ruhsal Yükler", p:P(
      `Ay doğduğun ânda ${c.menzilNo}. menzil olan ${c.menzil} menzilindeydi. ${menzil[1]}`,
@@ -191,7 +211,8 @@ function oku(c, ctx){
    )},
    {h:"Seyyârelerin Mevkii", p:P(
      `${giris()} doğduğun ânda yedi seyyârenin gökteki yerleri şöyleydi${saatYok?"; doğum saati bilinmediğinden hâneleri yazılmamış, yalnız burçları verilmiştir":""}:`,
-     ...gez.map(g=>`${PAD(g.k)} ${BURC[g.bi][0]} (${BURC[g.bi][1]}) burcunda, ${derece(g.lon)} derecede${g.hane?`, ${SIRA[g.hane]} hânede, yani ${K.HANE[g.hane]} hânesinde`:""}. ${K.HAL[g.hal].charAt(0).toLocaleUpperCase("tr")+K.HAL[g.hal].slice(1)}.${g.raci?" "+K.RACI:""}`),
+     ...gez.map(g=>`${PAD(g.k)} ${BURC[g.bi][0]} (${BURC[g.bi][1]}) burcunda, ${derece(g.lon)} derecede${g.hane?`, ${SIRA[g.hane]} hânede, yani ${K.HANE[g.hane]} hânesinde`:""}. ${K.HAL[g.hal].charAt(0).toLocaleUpperCase("tr")+K.HAL[g.hal].slice(1)}.${sevinc(g)?` Üstelik ${K.SEVINC_METIN}.`:""}${g.raci?" "+K.RACI:""}${g.hane?` ${PAD(g.k)} ${K.YILDIZ_FIIL[g.k]}.`:""}`),
+     !saatYok && K.HAYZ[gece?"gece":"gunduz"],
      (()=>{ const agir = gez.filter(g=>g.hane&&[1,4,7,10].includes(g.hane)&&(g.k==="Zuhal"||g.k==="Mirrih"||g.hal==="vebâl"||g.hal==="hubût"));
        if(!agir.length) return "Kazık hânelerinde, yani birinci, dördüncü, yedinci ve onuncu hânelerde ağır bir yıldız bulunmaz; bu, hayatın temel direklerinin sarsılmadan durduğuna delâlet eder.";
        const g=agir.sort((a,b)=>(b.k==="Zuhal")-(a.k==="Zuhal"))[0];
@@ -209,6 +230,22 @@ function oku(c, ctx){
      `Kadîm müneccimler doğuş haritasına bakıp yalnız ömrün tamamını değil, bulunulan devri de okurlardı. Bugün gökte Zühal ${BURC[c.gecis[0].bi][0]}, Müşterî ise ${BURC[c.gecis[1].bi][0]} burcundadır.`,
      K.GECIS_ZUHAL[c.gecis[0].hane],
      K.GECIS_MUSTERI[c.gecis[1].hane]
+   )},
+   !saatYok && {h:"Sehm-i Saâdet", p:P(
+     `Kadîm müneccimler kısmetin yerini Sehm-i Saâdet ile bulurlardı. ${gece?"Gece doğduğundan bu sehm tâli'e Güneş eklenip Ay çıkarılarak":"Gündüz doğduğundan bu sehm tâli'e Ay eklenip Güneş çıkarılarak"} hesaplanır. Seninki ${BURC[sehmBi][0]} (${BURC[sehmBi][1]}) burcunun ${Math.floor(sehmLon%30)}. derecesine, ${SIRA[sehmHane]} hâneye düşer.`,
+     K.SEHM_HANE[sehmHane],
+     sehmSahipG && `Sehmin sâhibi ${PAD(sehmSahip)} yıldızıdır ve ${SIRA[sehmSahipG.hane]} hânede, yani ${K.HANE[sehmSahipG.hane]} hânesindedir. Kısmetini sana getiren el budur: ${K.HANE[sehmSahipG.hane]} işleri kısmetin anahtarıdır. ${SAD[sehmSahip]>0?"Sâhibi sa'd bir yıldız olduğundan kısmet hayırla gelir.":SAD[sehmSahip]<0?"Sâhibi nahs bir yıldız olduğundan kısmet emekle, gecikerek gelir; ama gelince kalıcıdır.":"Sâhibi mümtezic bir yıldız olduğundan kısmet hâle göre şekil alır."}`
+   )},
+   !saatYok && {h:"Bu Senenin İntihâsı", p:P(
+     `İntihâ usulünde her tamamlanan yaş tâli'den bir hâne ileri götürür. Sen ${tamYas} yaşını tamamladığından bu sene ${SIRA[intihaHane]} hânen, yani ${BURC[intihaBi][0]} burcu açıktır.`,
+     K.INTIHA_METIN[intihaHane],
+     yilSahipG && `Senenin sâhibi ${PAD(yilSahip)} yıldızıdır; doğuşunda ${SIRA[yilSahipG.hane]} hânede, ${K.HANE[yilSahipG.hane]} hânesinde oturur. Bu sene o hânenin işleri de senenin işlerine karışır. ${SAD[yilSahip]>0?"Senenin sâhibi sa'd olduğundan sene hayırlı bir senedir.":SAD[yilSahip]<0?"Senenin sâhibi nahs olduğundan sene emek ve sabır ister.":"Senenin sâhibi mümtezic olduğundan sene, onun yanındaki yıldızlara göre renk alır."}${yilSahipG.hal==="beyt"||yilSahipG.hal==="şeref"?` Üstelik ${PAD(yilSahip)} doğuşunda kuvvetlidir; vaadini tutar.`:yilSahipG.hal==="vebâl"||yilSahipG.hal==="hubût"?` Lâkin ${PAD(yilSahip)} doğuşunda zayıftır; vaadi yarım kalabilir.`:""}`
+   )},
+   {h:"Ömür Devirleri (Fidâr)", sabit:true, p:P(
+     `Fidâr usulünde ömür, yıldızların sırayla hüküm sürdüğü devirlere bölünür; ${gece?"gece doğanlarda sıra Kamer ile":"gündüz doğanlarda sıra Şems ile"} başlar. Senin devirlerin şöyledir: ${fidar.filter(f=>f.bas<80).map(f=>`${FAD(f.k)} ${Math.round(f.bas)}–${Math.round(f.son)}`).join(", ")}.`,
+     `Şu an ${FAD(fidarNow.k)} devrindesin (${Math.round(fidarNow.bas)} ile ${Math.round(fidarNow.son)} yaşları arası). ${K.FIDAR_METIN[fidarNow.k]}${G[fidarNow.k]&&G[fidarNow.k].hane?` ${FAD(fidarNow.k)} doğuşunda ${SIRA[G[fidarNow.k].hane]} hânede olduğundan bu devirde ${K.HANE[G[fidarNow.k].hane]} işleri öne çıkar.`:""}`,
+     fidarAlt && `Bu büyük devrin içinde şu an ${FAD(fidarAlt.k)} küçük devri işler; sen ${yasYaz(fidarAlt.son)} olana dek sürer. ${fidarAlt.k===fidarNow.k?"Büyük ile küçük devrin sâhibi aynı olduğundan bu yıllarda o yıldızın sesi iki kat duyulur.":`${FAD(fidarNow.k)} ile ${FAD(fidarAlt.k)} birlikte hüküm sürer; ${SAD[fidarNow.k]+SAD[fidarAlt.k]>0?"ikisi birden hayra meyleder":SAD[fidarNow.k]+SAD[fidarAlt.k]<0?"ikisi birden zahmete meyleder":"biri öbürünü dengeler"}.`}`,
+     (()=>{ const sonraki=fidar[fidar.indexOf(fidarNow)+1]; return sonraki ? `Sıradaki büyük devir ${FAD(sonraki.k)} devridir ve ${Math.round(sonraki.bas)} yaşında başlar. ${K.FIDAR_METIN[sonraki.k]}` : ""; })()
    )}
   ].filter(Boolean)});
 
@@ -400,6 +437,7 @@ function oku(c, ctx){
       const baglac = karistir((K.BAGLAC||[]).slice());
       sec.subs.forEach(sub=>{
         let p = sub.p.filter(Boolean);
+        if(sub.sabit){ sub.p = p.map(t=>sinonim(t)); return; }
         // 1) seçki: uzun bahislerde hüküm taşımayan bir paragraf bazen dinlendirilir
         if(p.length>=4 && R()<0.45){ const aday=p.map((t,i)=>i).filter(i=>i>0&&!hukumlu(p[i])&&!(p[i+1]&&baglidir(p[i+1]))); if(aday.length){ p.splice(aday[Math.floor(R()*aday.length)],1); } }
         // 2) sıra: ilk paragraf yerinde kalır; birbirine bağlı olmayanlar yer değiştirebilir
@@ -438,7 +476,8 @@ function oku(c, ctx){
     rizik: `Rızkın ${K.UNSUR[top].yon} tarafından gelir${saatYok?"":hanede(2).length?`; mal hânende ${hanede(2).map(g=>PAD(g.k)).join(" ve ")}, ${({Zuhal:"emekle ve geç biriken mal",Musteri:"bereketli ve hayırlı kazanç",Mirrih:"çabuk gelen, çabuk giden para",Sems:"büyüklerden ve itibardan gelen mal",Zuhre:"güzel işlerden gelen rızık",Utarid:"ticaretten ve kalemden kazanç",Kamer:"artıp eksilen mal"})[hanede(2)[0].k]}`:`; mal hânen ${BURC[ikinciI][0]}`}`, meslek: saatYok ? isimY.meslek.split(/[.;]/)[0] : (hanede(10)[0] ? `Mevki hânende ${hanede(10).map(g=>PAD(g.k)).join(" ve ")}; ${({Zuhal:"geç ama sağlam yükseliş",Musteri:"itibar ve devlet kapısı",Mirrih:"rekabetle yükseliş",Sems:"baş olmak",Zuhre:"sanat ve zarafetle mevki",Utarid:"kalem ve ticaret",Kamer:"halkla iç içe iş"})[hanede(10)[0].k]}` : `Mevki hânen ${BURC[onuncuI][0]}`),
     gun: isimY.gun, renk: isimY.renk, tas: isimY.tas, maden: isimY.maden,
     esma: `Yâ ${enMunasip.tr}`, esmaSay: enMunasip.v, esmaMana: K.ESMA[enMunasip.tr]||"",
-    devir: saatYok ? `Sıradaki Müşterî yılı ${sonrakiMusteri} yaş` : `Müşterî bugün ${SIRA[c.gecis[1].hane]}, Zühal ${SIRA[c.gecis[0].hane]} hânende`,
+    devir: saatYok ? `${FAD(fidarNow.k)} devrindesin (${Math.round(fidarNow.bas)}–${Math.round(fidarNow.son)} yaş)` : `${FAD(fidarNow.k)} devrindesin (${Math.round(fidarNow.bas)}–${Math.round(fidarNow.son)} yaş); bu sene ${SIRA[intihaHane]} hânen açık, senenin sâhibi ${PAD(yilSahip)}`,
+    sehm: saatYok ? "" : K.SEHM_HANE[sehmHane],
     kismet: ["Kapalı, sabırla açılır","Orta, emekle açılır","Açık","Çok açık"][kismetDerece],
     ruhEs: ruhPuan>=3?"kavî":ruhPuan>=2?"orta":"zayıf",
     huzur: ["çetin","orta hâlli","huzurlu"][huzurD],
